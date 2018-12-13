@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home.vue";
+import home from "./views/home";
+import main from "@/components/main/main";
 
 Vue.use(Router);
 
@@ -8,17 +9,54 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "home",
-      component: Home
+      name: "main",
+      component: main,
+      meta: { name: "常用" },
+      redirect: "/home",
+      children: [
+        {
+          path: "/home",
+          name: "home",
+          component: home,
+          meta: { name: "常用", hidden: true }
+        },
+        {
+          path: "/table",
+          name: "table",
+          meta: { name: "表格" },
+          component: () =>
+            import(/* webpackChunkName: "table" */ "./views/table.vue")
+        },
+        {
+          path: "/form",
+          name: "form",
+          meta: { name: "表单" },
+          component: () =>
+            import(/* webpackChunkName: "table" */ "./views/form.vue")
+        }
+      ]
     },
     {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
+      path: "/level",
+      name: "level",
+      component: main,
+      meta: { name: "level1" },
+      children: [
+        {
+          path: "/level1-1",
+          name: "level1-1",
+          meta: { name: "层级1-1" },
+          component: () =>
+            import(/* webpackChunkName: "about" */ "@/components/level.vue")
+        },
+        {
+          path: "/level1-2",
+          name: "level1-2",
+          meta: { name: "层级1-2" },
+          component: () =>
+            import(/* webpackChunkName: "about" */ "@/components/level.vue")
+        }
+      ]
     }
   ]
 });

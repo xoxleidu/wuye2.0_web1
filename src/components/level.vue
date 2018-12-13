@@ -1,6 +1,7 @@
 <template>
-  <router-view></router-view>
+  <div>{{$route.name}}</div>
 </template>
+
 <script>
 export default {};
 </script>

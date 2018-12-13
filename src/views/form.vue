@@ -1,6 +1,10 @@
 <template>
-  <router-view></router-view>
+  <div>form</div>
 </template>
+
 <script>
 export default {};
 </script>
+
+<style>
+</style>
