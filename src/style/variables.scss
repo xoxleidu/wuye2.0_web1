@@ -1,13 +1,12 @@
 /*
-Write your variables here. All available variables can be
-found in element-ui/packages/theme-chalk/src/common/var.scss.
-For example, to overwrite the theme color:
-*/
+填写要覆盖elementUI的变量
+能覆盖的变量 查看  node_modules/element-ui/packages/theme-chalk/src/common/var.scss.
+例：覆盖基础颜色:
 $--color-primary: blue;
-
-/* icon font path, required */
+// 必须重新覆盖icon路径，否则会报错, required 
 $--font-path: "~element-ui/lib/theme-chalk/fonts";
 
 @import "~element-ui/packages/theme-chalk/src/index";
+*/
 
 $baseColor: red;

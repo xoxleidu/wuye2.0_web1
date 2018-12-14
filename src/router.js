@@ -24,15 +24,13 @@ export default new Router({
           path: "/table",
           name: "table",
           meta: { name: "表格" },
-          component: () =>
-            import(/* webpackChunkName: "table" */ "./views/table.vue")
+          component: () => import("./views/table.vue")
         },
         {
           path: "/form",
           name: "form",
           meta: { name: "表单" },
-          component: () =>
-            import(/* webpackChunkName: "table" */ "./views/form.vue")
+          component: () => import("./views/form.vue")
         }
       ]
     },
@@ -46,15 +44,13 @@ export default new Router({
           path: "/level1-1",
           name: "level1-1",
           meta: { name: "层级1-1" },
-          component: () =>
-            import(/* webpackChunkName: "about" */ "@/components/level.vue")
+          component: () => import("@/components/level.vue")
         },
         {
           path: "/level1-2",
           name: "level1-2",
           meta: { name: "层级1-2" },
-          component: () =>
-            import(/* webpackChunkName: "about" */ "@/components/level.vue")
+          component: () => import("@/components/level.vue")
         }
       ]
     }
