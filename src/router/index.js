@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-import home from "./views/home";
+import home from "@/views/home";
 import main from "@/components/main/main";
 
 Vue.use(Router);
@@ -24,13 +24,13 @@ export default new Router({
           path: "/table",
           name: "table",
           meta: { name: "表格" },
-          component: () => import("./views/table.vue")
+          component: () => import("@/views/table.vue")
         },
         {
           path: "/form",
           name: "form",
           meta: { name: "表单" },
-          component: () => import("./views/form.vue")
+          component: () => import("@/views/form.vue")
         }
       ]
     },

@@ -1,9 +1,9 @@
 <template>
   <div style="width:50%">
-    <el-form ref="form" :model="formData" label-width="80px">
+    <el-form ref="postForm" :model="formData" status-icon :rules="rules">
       <el-row :gutter="20">
         <el-col>
-          <el-form-item label="名称">
+          <el-form-item label="名称" prop="name">
             <el-input size="small" style="width:50%" v-model="formData.name"></el-input>
           </el-form-item>
         </el-col>
@@ -71,8 +71,12 @@
 </template>
 
 <script>
+import rules from "./form.rule";
+
 export default {
   data() {
+    //无关业务逻辑的数据较多时，为了减少$data观看复杂度，可进行文件拆分
+    //例如验证规则；可单独在同目录存放js文件，例如规则 xxx(组件名).rules.js
     return {
       formData: {
         name: "",
@@ -82,12 +86,20 @@ export default {
         resource: "",
         desc: "",
         time: []
-      }
+      },
+      rules
     };
   },
   methods: {
     onSubmit() {
-      console.log(this.formData);
+      this.$refs["postForm"].validate(valid => {
+        if (valid) {
+          alert("验证通过!");
+        } else {
+          alert("验证不通过!!");
+          return false;
+        }
+      });
     }
   }
 };
