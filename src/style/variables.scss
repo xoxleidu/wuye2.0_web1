@@ -1,12 +1,6 @@
 /*
-填写要覆盖elementUI的变量
-能覆盖的变量 查看  node_modules/element-ui/packages/theme-chalk/src/common/var.scss.
-例：覆盖基础颜色:
-$--color-primary: blue;
-// 必须重新覆盖icon路径，否则会报错, required 
-$--font-path: "~element-ui/lib/theme-chalk/fonts";
-
-@import "~element-ui/packages/theme-chalk/src/index";
+    全局scss变量说明：
+    根目录下  vue.config.js中 会调用此文件，并通过webpack注入到所有.vue组件中，
+    所以 所有.vue文件中声明了 lang=scss的sytle区块内，均可以调用该文件的变量
 */
-
 $baseColor: red;
