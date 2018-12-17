@@ -8,14 +8,17 @@
       text-color="rgba(255,255,255,.8)"
     >
       <div v-for="route in $router.options.routes" :key="route.name">
-        <el-menu-item :index="route.name" v-if="route.meta.single">{{route.meta.name}}</el-menu-item>
+        <el-menu-item :index="route.children[0].name" v-if="route.meta.single">
+          <i :class="route.meta.icon"></i>
+          {{route.meta.name}}
+        </el-menu-item>
         <el-submenu :index="route.name" v-if="!route.meta.single">
           <template slot="title" v-if="!route.meta.single">
-            <i class="el-icon-message"></i>
+            <i :class="route.meta.icon"></i>
             {{route.meta.name}}
           </template>
 
-          <template v-if="route.children.length && !route.meta.single">
+          <template v-if="route.children && route.children.length && !route.meta.single">
             <el-menu-item
               :index="subRoute.name"
               v-for="subRoute in route.children"
@@ -28,11 +31,7 @@
   </el-aside>
 </template>
 <script>
-export default {
-  created() {
-    console.log(this.$router.options.routes);
-  }
-};
+export default {};
 </script>
 <style lang="scss" scoped>
 .main-slide {

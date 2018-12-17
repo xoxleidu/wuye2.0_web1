@@ -20,3 +20,7 @@ export const addUser = query => {
   // query = qs.stringify(query);
   return ajax.post("/add", query);
 };
+
+export const login = query => {
+  return ajax.post("/login", query);
+};

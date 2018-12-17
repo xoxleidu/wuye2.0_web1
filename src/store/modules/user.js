@@ -1,4 +1,4 @@
-var userData = JSON.parse(localStorage.BEIDOU || "{}");
+var userData = JSON.parse(localStorage.CCCTSUSER || "{}");
 const user = {
   state: {
     token: userData.token || "", //token
@@ -17,10 +17,10 @@ const user = {
       state.token = userInfo.token;
       state.pass_word = userInfo.pass_word;
       state.user_name = userInfo.user_name;
-      localStorage.setItem("BEIDOU", JSON.stringify(state));
+      localStorage.setItem("CCCTSUSER", JSON.stringify(state));
     },
     clearLoginInfo() {
-      localStorage.removeItem("BEIDOU");
+      localStorage.removeItem("CCCTSUSER");
     }
   },
   actions: {

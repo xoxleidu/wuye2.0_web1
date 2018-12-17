@@ -7,11 +7,9 @@
           <i class="el-icon-setting" style="margin-right: 15px"></i>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <span>王小虎</span>
+        <span @click="loginOut">退出</span>
       </el-header>
 
       <el-main>
@@ -36,6 +34,13 @@ body,
 <script>
 import slideMenu from "./slide-menu";
 export default {
-  components: { slideMenu }
+  components: { slideMenu },
+  methods: {
+    loginOut() {
+      this.$store.dispatch("loginOut").then(() => {
+        this.$router.replace({ name: "login" });
+      });
+    }
+  }
 };
 </script>
