@@ -7,7 +7,6 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
-    {path:"/",name: "home",boot:true,component: home},
     {
       path: "/signle",
       name: "signle",
@@ -22,7 +21,7 @@ export default new Router({
       ]
     },
     {
-      path: "/aa",
+      path: "/",
       name: "main",
       component: main,
       meta: { name: "常用" },
