@@ -21,11 +21,11 @@ export default new Router({
       ]
     },
     {
-      path: "/aa",
+      path: "/",
       name: "main",
       component: main,
       meta: { name: "常用" },
-      // redirect: "/home",
+      redirect: "/home",
       children: [
         {
           path: "/home",
