@@ -8,11 +8,24 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: "/",
+      path: "/signle",
+      name: "signle",
+      component: main,
+      meta: { name: "独立路由", single: true },
+      children: [
+        {
+          path: "",
+          name: "signle",
+          component: home
+        }
+      ]
+    },
+    {
+      path: "/aa",
       name: "main",
       component: main,
       meta: { name: "常用" },
-      redirect: "/home",
+      // redirect: "/home",
       children: [
         {
           path: "/home",
