@@ -7,18 +7,20 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
+    {path:"/",name: "home",boot:true,component: home},
     {
       path: "/",
       name: "main",
       component: main,
       meta: { name: "常用" },
       redirect: "/home",
+      boot:false,
       children: [
         {
           path: "/home",
           name: "home",
           component: home,
-          meta: { name: "常用", hidden: true }
+          meta: { name: "常用", hidden: true, }
         },
         {
           path: "/table",
@@ -38,6 +40,7 @@ export default new Router({
       path: "/level",
       name: "level",
       component: main,
+      boot:false,
       meta: { name: "level1" },
       children: [
         {
