@@ -1,5 +1,10 @@
 <template>
-  <div class="about">
-    <h1>this is an first page</h1>
-  </div>
+  <div>home page</div>
 </template>
+
+<script>
+export default {};
+</script>
+
+<style>
+</style>
