@@ -9,12 +9,24 @@ export default new Router({
   routes: [
     {path:"/",name: "home",boot:true,component: home},
     {
-      path: "/",
+      path: "/signle",
+      name: "signle",
+      component: main,
+      meta: { name: "独立路由", single: true },
+      children: [
+        {
+          path: "",
+          name: "signle",
+          component: home
+        }
+      ]
+    },
+    {
+      path: "/aa",
       name: "main",
       component: main,
       meta: { name: "常用" },
-      redirect: "/home",
-      boot:false,
+      // redirect: "/home",
       children: [
         {
           path: "/home",

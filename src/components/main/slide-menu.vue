@@ -7,24 +7,32 @@
       background-color="#20222a"
       text-color="rgba(255,255,255,.8)"
     >
-      <el-submenu :index="route.name" v-for="route in $router.options.routes" :key="route.name">
-        <template slot="title">
-          <i class="el-icon-message"></i>
-          {{route.meta.name}}
-        </template>
-        <template v-if="route.children.length">
-          <el-menu-item
-            :index="subRoute.name"
-            v-for="subRoute in route.children"
-            :key="subRoute.name"
-          >{{subRoute.meta.name}} {{subRoute.name}}</el-menu-item>
-        </template>
-      </el-submenu>
+      <div v-for="route in $router.options.routes" :key="route.name">
+        <el-menu-item :index="route.name" v-if="route.meta.single">{{route.meta.name}}</el-menu-item>
+        <el-submenu :index="route.name" v-if="!route.meta.single">
+          <template slot="title" v-if="!route.meta.single">
+            <i class="el-icon-message"></i>
+            {{route.meta.name}}
+          </template>
+
+          <template v-if="route.children.length && !route.meta.single">
+            <el-menu-item
+              :index="subRoute.name"
+              v-for="subRoute in route.children"
+              :key="subRoute.name"
+            >{{subRoute.meta.name}} {{subRoute.name}}</el-menu-item>
+          </template>
+        </el-submenu>
+      </div>
     </el-menu>
   </el-aside>
 </template>
 <script>
-export default {};
+export default {
+  created() {
+    console.log(this.$router.options.routes);
+  }
+};
 </script>
 <style lang="scss" scoped>
 .main-slide {
