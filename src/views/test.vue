@@ -121,7 +121,7 @@ export default {
       });
     },
     NodeDel(n, d) {
-      //删除节点
+      //删除节点ssss
       console.log(n, d);
       //let that = this;
       if (d.children && d.children.length !== 0) {
