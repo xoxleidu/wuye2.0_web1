@@ -69,19 +69,21 @@ export default {
   data() {
     return {
       user: {},
-      buttons: [{
-        id:1,
-        name:"测试1",
-        val:"/test"
-      },{
-        id:2,
-        name:"测试2",
-        val:"/test"
-      }]
+      buttons: [
+        {
+          id: 1,
+          name: "测试1",
+          val: "/test"
+        },
+        {
+          id: 2,
+          name: "测试2",
+          val: "/test"
+        }
+      ]
     };
   },
   created() {
-    
     var userId = this.$store.getters.userId;
     get(userId).then(Response => {
       console.log(Response);
@@ -90,15 +92,12 @@ export default {
     //alert(this.$store.getters.user_id)
   },
   methods: {
-    addButton() {
-      
-    }
+    addButton() {}
   }
 };
 </script>
 
 <style>
-
 .gn-button button {
   width: 150px;
   height: 150px;
