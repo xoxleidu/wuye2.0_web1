@@ -28,30 +28,44 @@ var routes = [
     component: () => import("@/views/login.vue")
   },
   {
-    path: "/signle",
+    path: "/",
+    name: "index",
     component: main,
-    meta: { name: "独立路由", single: true, icon: "el-icon-menu" },
+    redirect: "/",
+    meta: { name: "首页", single: true, icon: "el-icon-menu" },
     children: [
       {
-        path: "",
-        name: "signle",
+        path: "/",
+        name: "index",
         component: () => import("@/views/home.vue")
-        // meta: {p:"111"}, //独立路由权限需要加到子路由中
       }
     ]
   },
   {
-    path: "/",
-    name: "main",
+    path: "/test",
+    name: "test",
     component: main,
-    meta: { name: "常用", icon: "el-icon-star-on" },
-    redirect: "/home",
+    meta: { name: "测试", single: true, icon: "el-icon-menu" },
     children: [
       {
-        path: "/home",
-        name: "home",
-        component: () => import("@/views/home.vue"),
-        meta: { name: "常用" }
+        path: "/test",
+        name: "test",
+        component: () => import("@/views/test.vue")
+      }
+    ]
+  },
+  {
+    path: "/quanxian",
+    name: "quanxian",
+    component: main,
+    meta: { name: "常用", icon: "el-icon-star-on" },
+    children: [
+      {
+        path: "/quanxian",
+        name: "quanxian",
+        component: () => import("@/views/quanxian.vue"),
+        meta: { name: "常用", p:"321321321"}
+        // meta: {p:"111"}, //独立路由权限需要加到子路由中
       },
       {
         path: "/table",
@@ -104,6 +118,46 @@ var routes = [
         name: "level1-2",
         meta: { name: "层级1-2" },
         component: () => import("@/components/level.vue")
+      }
+    ]
+  },
+  {
+    path: "/manageBusiness",
+    name: "业务管理",
+    component: main,
+    meta: { name: "业务管理" },
+    children: [
+      {
+        path: "/manageBusiness/products",
+        name: "user",
+        meta: { name: "物产管理" },
+        component: () => import("@/views/manageBusiness/products.vue")
+      }
+    ]
+  },
+  {
+    path: "/manageSys",
+    name: "系统管理",
+    component: main,
+    meta: { name: "系统管理" },
+    children: [
+      {
+        path: "/manageSys/user",
+        name: "user",
+        meta: { name: "用户管理" },
+        component: () => import("@/views/manageSys/user.vue")
+      },
+      {
+        path: "/manageSys/group",
+        name: "group",
+        meta: { name: "权限管理" },
+        component: () => import("@/views/manageSys/group.vue")
+      },
+      {
+        path: "/manageSys/passWord",
+        name: "passWord",
+        meta: { name: "修改密码" },
+        component: () => import("@/views/manageSys/passWord.vue")
       }
     ]
   }
