@@ -86,9 +86,9 @@ export default {
         if (valid) {
           alert(JSON.stringify(this.ruleForm2));
           verifyPassWord(this.ruleForm2)
-            .then(Response => {
+            .then(() => {
                 updatePassWord(this.ruleForm2)
-                    .then(res => {
+                    .then(() => {
                         alert("修改成功")
                     })
             })

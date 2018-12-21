@@ -13,6 +13,16 @@
       </el-header>
 
       <el-main>
+        <div>
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item
+              :to="{path:route.path}"
+              v-for="route in breadcurmb"
+              :key="route.path"
+            >{{route.meta.name}}</el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -34,6 +44,16 @@ body,
 <script>
 import slideMenu from "./slide-menu";
 export default {
+  computed: {
+    breadcurmb: function() {
+      return this.$route.matched.filter(item => {
+        return item.meta.name && !item.meta.hidden;
+      });
+    }
+  },
+  created() {
+    console.log(this.$router);
+  },
   components: { slideMenu },
   methods: {
     loginOut() {

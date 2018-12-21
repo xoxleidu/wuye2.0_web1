@@ -39,7 +39,7 @@ export default {
     //后台获取
     getCommunity().then(res => {
       console.log(res);
-      this.options = res.data.records;
+      this.options = res.data.data.records;
     });
   }
 };

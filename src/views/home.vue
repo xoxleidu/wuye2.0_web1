@@ -85,9 +85,9 @@ export default {
   },
   created() {
     var userId = this.$store.getters.userId;
-    get(userId).then(Response => {
-      console.log(Response);
-      this.user = Response.data;
+    get(userId).then(res => {
+      console.log(res);
+      this.user = res.data.data;
     });
     //alert(this.$store.getters.user_id)
   },

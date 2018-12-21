@@ -4,19 +4,19 @@ const user = {
     token: userData.token || "", //token
     rights: userData.rights || [], //用户权限范围
     loginTime: "", //登陆日期 判断用户失效
-    userId: userData.userId || "", //用户ID
-    name: userData.name || "", //昵称
-    passWord: "",
-    userName: ""
+    user_id: userData.user_id || "", //用户ID
+    real_name: userData.real_name || "", //昵称
+    pass_word: "",
+    user_name: ""
   },
   mutations: {
     loginIn(state, userInfo) {
-      state.name = userInfo.name;
+      state.real_name = userInfo.real_name;
       state.rights = userInfo.rights.split(",");
-      state.userId = userInfo.userId;
+      state.user_id = userInfo.user_id;
       state.token = userInfo.token;
-      state.passWord = userInfo.passWord;
-      state.userName = userInfo.userName;
+      state.pass_word = userInfo.pass_word;
+      state.user_name = userInfo.user_name;
       localStorage.setItem("CCCTSUSER", JSON.stringify(state));
     },
     clearLoginInfo() {
@@ -33,8 +33,7 @@ const user = {
   },
   getters: {
     user_id: state => {
-      return state.userId;
-      
+      return state.user_id;
     },
     isLogin: state => {
       return !!state.token;

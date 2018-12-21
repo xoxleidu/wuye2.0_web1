@@ -18,106 +18,36 @@ NProgress.configure({
       (3) ：icon 路由对应图标的class 或其他实现方式的图标（默认不配置）
       (4) ：name 路由对应的名称，用做呈现
       (5) : p 路由所需要的权限
-      
-
 */
 var routes = [
   {
-    path: "/login",
-    name: "login",
-    component: () => import("@/views/login.vue")
-  },
-  {
     path: "/",
-    name: "index",
     component: main,
-    redirect: "/",
-    meta: { name: "首页", single: true, icon: "el-icon-menu" },
+    meta: { hidden: true, name: "首页", icon: "el-icon-star-on" },
     children: [
       {
-        path: "/",
-        name: "index",
+        path: "",
         component: () => import("@/views/home.vue")
       }
     ]
   },
   {
+    path: "/login",
+    meta: { hidden: true },
+    component: () => import("@/views/login.vue")
+  },
+  {
     path: "/test",
-    name: "test",
     component: main,
-    meta: { name: "测试", single: true, icon: "el-icon-menu" },
+    meta: {
+      name: "测试",
+      single: true,
+      icon: "el-icon-menu"
+    },
     children: [
       {
-        path: "/test",
-        name: "test",
+        path: "",
         component: () => import("@/views/test.vue")
-      }
-    ]
-  },
-  {
-    path: "/quanxian",
-    name: "quanxian",
-    component: main,
-    meta: { name: "常用", icon: "el-icon-star-on" },
-    children: [
-      {
-        path: "/quanxian",
-        name: "quanxian",
-        component: () => import("@/views/quanxian.vue"),
-        meta: { name: "常用", p:"321321321"}
-        // meta: {p:"111"}, //独立路由权限需要加到子路由中
-      },
-      {
-        path: "/table",
-        name: "table",
-        meta: { name: "表格" },
-        component: () => import("@/views/table.vue")
-      },
-      {
-        path: "/form",
-        name: "form",
-        meta: { name: "表单" },
-        component: () => import("@/views/form.vue")
-      }
-    ]
-  },
-  {
-    path: "/rights",
-    name: "rights",
-    component: main,
-    meta: { name: "权限控制", icon: "el-icon-setting" },
-    children: [
-      {
-        path: "/hasRight",
-        name: "hasRight",
-        component: () => import("@/views/home.vue"),
-        meta: { name: "有权限" }
-      },
-      {
-        path: "/noRight",
-        name: "noRight",
-        component: () => import("@/views/home.vue"),
-        meta: { name: "无权限", p: "123asdad" }
-      }
-    ]
-  },
-  {
-    path: "/level",
-    name: "level",
-    component: main,
-    meta: { name: "level1" },
-    children: [
-      {
-        path: "/level1-1",
-        name: "level1-1",
-        meta: { name: "层级1-1" },
-        component: () => import("@/components/level.vue")
-      },
-      {
-        path: "/level1-2",
-        name: "level1-2",
-        meta: { name: "层级1-2" },
-        component: () => import("@/components/level.vue")
       }
     ]
   },
@@ -160,43 +90,127 @@ var routes = [
         component: () => import("@/views/manageSys/passWord.vue")
       }
     ]
+  },
+  {
+    path: "/common",
+    component: main,
+    meta: { name: "通用", icon: "el-icon-star-on" },
+    children: [
+      {
+        path: "/home",
+        component: () => import("@/views/home.vue"),
+        meta: { name: "首页1" }
+      },
+      {
+        path: "/common/table",
+        meta: { name: "表格" },
+        component: () => import("@/views/table.vue")
+      },
+      {
+        path: "/common/form",
+        meta: { name: "表单" },
+        component: () => import("@/views/form.vue")
+      }
+    ]
+  },
+  {
+    path: "/rights",
+    component: main,
+    meta: { name: "权限控制", icon: "el-icon-setting" },
+    children: [
+      {
+        path: "/hasRight",
+        component: () => import("@/views/home.vue"),
+        meta: { name: "有权限" }
+      },
+      {
+        path: "/noRight",
+        component: () => import("@/views/home.vue"),
+        meta: { name: "无权限", p: "123asdad" }
+      }
+    ]
+  },
+  {
+    path: "/level",
+    component: main,
+    meta: { name: "level1" },
+    children: [
+      {
+        path: "/level1-1",
+        meta: { name: "层级1-1" },
+        component: () => import("@/components/level.vue"),
+        children: [
+          {
+            path: "/level1-1-1",
+            meta: { name: "层级1-1-1" },
+            component: () => import("@/components/level.vue"),
+            children: [
+              {
+                path: "/level1-1-1-1",
+                meta: { name: "层级1-1-1-1" },
+                component: () => import("@/components/level.vue")
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: "/level1-2",
+        meta: { name: "层级1-2" },
+        component: () => import("@/components/level.vue")
+      }
+    ]
+  },
+  {
+    path: "*",
+    component: main,
+    meta: { hidden: true },
+    children: [
+      {
+        path: "",
+        component: () => import("@/components/404.vue")
+      }
+    ]
   }
 ];
 
 /*
  * 验证权限
- * 传入路由，递归判断meta中的p  如果存在于store（vuex）中存储的用户权限，
- * 动态设置 meta的 hasRights为true，否则为false
+ * 传入路由，递归判断meta中的p  是否存在于store（vuex）中存储的用户权限，
+ * 如果不存在，删除路由
  */
 (function() {
   var userRights = store.state.user.rights;
   var isAdmin = store.state.user.user_id == 1;
   permissions(routes);
   function permissions(routers) {
-    routers.map(router => {
+    routers.map((router, index) => {
       router.meta = router.meta || {};
       if (router.children) {
         permissions(router.children);
       }
       if (isAdmin && router.meta) {
         //管理员都为true
-        router.meta.hasRights = true;
+        // router.meta.hasRights = true;
         return false;
       }
       var routerRights = router.meta.p;
       if (routerRights) {
         routerRights = routerRights.split(",");
       } else {
-        router.meta.hasRights = true;
+        // router.meta.hasRights = true;
         return false;
       }
-      router.meta.hasRights = false;
+      var hasRight = false;
 
       routerRights.map(rights => {
         if (userRights.indexOf(rights) != -1) {
-          router.meta.hasRights = true;
+          hasRight = true;
         }
       });
+      if (!hasRight) {
+        routers.splice(index, 1);
+      }
     });
   }
 })();
@@ -228,14 +242,14 @@ router.beforeEach((to, from, next) => {
     return false;
   }
   if (store.getters.isLogin && localStorage.CCCTSUSER) {
-    if (to.name == "login") {
+    if (to.path == "/login") {
       next({
         path: "/"
       });
     }
     next();
   } else {
-    if (to.name != "login") {
+    if (to.path != "/login") {
       Message({
         showClose: true,
         message: "请重新登录！"

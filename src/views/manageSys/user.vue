@@ -392,21 +392,21 @@ export default {
         currentPage: 1
       };
       //getUser(this.currentPage, this.pageSize,this.selectSearch,this.inputSearch)
-      getUser(sData).then(response => {
+      getUser(sData).then(res => {
         //debugger
-        console.log(response);
+        console.log(res);
         this.listLoading = false;
-        //   this.total = response.data.total;
-        //   this.currentPage = response.data.current;
-        this.tableData = response.data.records;
+        //   this.total = res.data.total;
+        //   this.currentPage = res.data.current;
+        this.tableData = res.data.data.records;
       });
     },
     //添加数据
     createData() {
       console.log(this.temp);
       addUser(this.temp).then(res => {
-        if (res.code == "000") {
-          this.temp.id = res.result;
+        if (res.code == "0000") {
+          this.temp.id = res.data.data.records;
           this.tableData.unshift(this.temp);
           this.dialogFormVisible = false;
           this.$notify({
@@ -443,7 +443,7 @@ export default {
     updateData() {
       console.log(this.temp);
       updateUser(this.temp).then(res => {
-        if (res.code == "000") {
+        if (res.code == "0000") {
           for (const v of this.tableData) {
             if (v.id === this.temp.id) {
               const index = this.tableData.indexOf(v);
@@ -472,7 +472,7 @@ export default {
     //删除单个
     handleDelete(row) {
       deleteUser(row.id).then(res => {
-        if (res.code == "000") {
+        if (res.code == "0000") {
           const index = this.tableData.indexOf(row);
           this.tableData.splice(index, 1);
           this.$notify({

@@ -41,7 +41,7 @@ export default {
     //后台获取
     getUser().then(res => {
       console.log(res);
-      this.options = this.dataTransform(res.data.records);
+      this.options = this.dataTransform(res.data.data.records);
       //this.user = res.data.records
     });
   },

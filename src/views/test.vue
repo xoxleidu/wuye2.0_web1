@@ -78,7 +78,7 @@ export default {
   },
   created() {
     getcc().then(res => {
-      this.setTree = res.data.records;
+      this.setTree = res.data.data.records;
     });
   },
   methods: {
@@ -121,7 +121,7 @@ export default {
       });
     },
     NodeDel(n, d) {
-      //删除节点sssssss
+      //删除节点ssss
       console.log(n, d);
       //let that = this;
       if (d.children && d.children.length !== 0) {

@@ -27,6 +27,7 @@ var dict = {
     label: "蓝票",
     value: 1
   }]
+
 };
 if (process.env.NODE_ENV == "production") {
   dict = Object.assign(dict, window.SITE_CONFIG);
