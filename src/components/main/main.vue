@@ -12,8 +12,8 @@
         <span @click="loginOut">退出</span>
       </el-header>
 
-      <el-main>
-        <div>
+      <el-main class="main-slide">
+        <div class="main-slide-item">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item
@@ -23,7 +23,8 @@
             >{{route.meta.name}}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
-        <router-view></router-view>
+        <div class="main-view" v-bind:style="{height: myHeight}">
+        <router-view></router-view></div>
       </el-main>
     </el-container>
   </el-container>
@@ -35,15 +36,36 @@ body,
   height: 100%;
 }
 .el-header {
-  background-color: #b3c0d1;
-  color: #333;
+  background-color: #20222a;
+  color: #FFF;
   line-height: 60px;
+}
+.main-slide {
+  background-color: #f8f8f8;
+}
+.main-view {
+  background-color: #FFF;
+  padding: 20px;
+  margin-top: 20px;
+  -webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 10px rgba(220, 220, 220, .4);
+  box-shadow:inset 0px 1px 1px rgba(0,0,0,0.075), 0px 0px 8px rgba(220,220,220,0.4);
+}
+.main-slide-item {
+  background-color: #FFF;
+  padding: 20px;
+  -webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 10px rgba(220, 220, 220, .4);
+  box-shadow:inset 0px 1px 1px rgba(0,0,0,0.075), 0px 0px 10px rgba(220,220,220,0.4);
 }
 </style>
 
 <script>
 import slideMenu from "./slide-menu";
 export default {
+  data(){
+    return {
+      myHeight: (window.innerHeight - 220) + 'px'
+    }
+  },
   computed: {
     breadcurmb: function() {
       return this.$route.matched.filter(item => {

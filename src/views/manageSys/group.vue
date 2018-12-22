@@ -6,6 +6,7 @@
     <community-select v-on:communitySelect="community($event)"></community-select>
     <pay-select v-on:paySelect="pay($event)"></pay-select>
     <hl-select v-on:hlSelect="hl($event)"></hl-select>
+    <office-select v-on:officeSelect="office($event)"></office-select>
   </div>
 </template>
 <script>
@@ -15,9 +16,10 @@ import communitySelect from "@/components/select/communitySelect.vue";
 import productSelect from "@/components/select/productSelect.vue";
 import paySelect from "@/components/select/paySelect.vue";
 import hlSelect from "@/components/select/hlSelect.vue";
+import officeSelect from "@/components/select/officeSelect.vue";
 export default {
   name: "group",
-  components: { userSelect,dateSelect,communitySelect,productSelect,paySelect,hlSelect },
+  components: { userSelect,dateSelect,communitySelect,productSelect,paySelect,hlSelect,officeSelect },
   methods: {
     user(msg) {
       console.log(msg)
@@ -35,6 +37,9 @@ export default {
       console.log(msg)
     },
     hl(msg) {
+      console.log(msg)
+    },
+    office(msg) {
       console.log(msg)
     }
   }

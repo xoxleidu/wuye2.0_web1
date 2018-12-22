@@ -7,7 +7,7 @@
 
 
 <script>
-import { getCommunity } from "@/api/product";
+import { getCommunity } from "@/api/estate";
 export default {
   name: "communitySelect",
   data() {

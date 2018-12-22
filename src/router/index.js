@@ -61,7 +61,7 @@ var routes = [
         path: "/manageBusiness/products",
         name: "user",
         meta: { name: "物产管理" },
-        component: () => import("@/views/manageBusiness/products.vue")
+        component: () => import("@/views/manageBusiness/estate.vue")
       }
     ]
   },

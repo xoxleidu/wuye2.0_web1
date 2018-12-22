@@ -1,5 +1,5 @@
 <template>
-  <el-aside width="200px" class="main-slide">
+  <el-aside width="240px" class="main-slide">
     <a href="/" class="logo">CCCTS_FE</a>
     <el-menu
       :default-active="$route.path"

@@ -1,16 +1,15 @@
 <template>
-<div>
+  <div>
     <el-select v-model="selectProduct" placeholder="请选择物产">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
   </div>
-  
 </template>
 
 
 
 <script>
-import { getProduct } from "@/api/product";
+import { getEstate } from "@/api/estate";
 export default {
   name: "productSelect",
   data() {
@@ -40,7 +39,7 @@ export default {
     //初始话下拉框的值
     this.options = {};
     //后台获取
-    getProduct().then(res => {
+    getEstate().then(res => {
       console.log(res);
       this.options = res.data.data.records;
     });
