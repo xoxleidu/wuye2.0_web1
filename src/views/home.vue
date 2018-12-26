@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { get } from "@/api/index";
+// import { get } from "@/api/index";
 export default {
   data() {
     return {
@@ -84,11 +84,11 @@ export default {
     };
   },
   created() {
-    var userId = this.$store.getters.userId;
-    get(userId).then(res => {
-      console.log(res);
-      this.user = res.data.data;
-    });
+    // var userId = this.$store.getters.userId;
+    // get(userId).then(res => {
+    //   console.log(res);
+    //   this.user = res.data.data;
+    // });
     //alert(this.$store.getters.user_id)
   },
   methods: {
