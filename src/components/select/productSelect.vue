@@ -9,7 +9,7 @@
 
 
 <script>
-import { getEstate } from "@/api/estate";
+import { getEstateType } from "@/api/estate";
 export default {
   name: "productSelect",
   data() {
@@ -39,7 +39,7 @@ export default {
     //初始话下拉框的值
     this.options = {};
     //后台获取
-    getEstate().then(res => {
+    getEstateType().then(res => {
       console.log(res);
       this.options = res.data.data.records;
     });

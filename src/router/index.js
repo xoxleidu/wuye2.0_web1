@@ -52,16 +52,45 @@ var routes = [
     ]
   },
   {
+    path: "/zujian",
+    component: main,
+    meta: {
+      name: "组件",
+      single: true,
+      icon: "el-icon-menu"
+    },
+    children: [
+      {
+        path: "",
+        component: () => import("@/views/zujian.vue")
+      }
+    ]
+  },
+  {
     path: "/manageBusiness",
     name: "业务管理",
     component: main,
     meta: { name: "业务管理" },
     children: [
       {
-        path: "/manageBusiness/products",
-        name: "user",
-        meta: { name: "物产管理" },
-        component: () => import("@/views/manageBusiness/estate.vue")
+        path: "/manageBusiness/community",
+        name: "community",
+        meta: { name: "物产管理",single:true },
+        component: () => import("@/views/manageBusiness/community.vue"),
+        children: [
+          {
+            path: "/manageBusiness/estate",
+            name: "estate",
+            meta: { name: "物产详情"},
+            component: () => import("@/views/manageBusiness/estate.vue")
+          }
+        ]
+      },
+      {
+        path: "/manageBusiness/chargingitems",
+        name: "chargingitems",
+        meta: { name: "收费项管理"},
+        component: () => import("@/views/manageBusiness/chargingitems.vue")
       }
     ]
   },
@@ -148,6 +177,11 @@ var routes = [
               {
                 path: "/level1-1-1-1",
                 meta: { name: "层级1-1-1-1" },
+                component: () => import("@/components/level.vue")
+              },
+              {
+                path: "/level1-1-1-2",
+                meta: { hidden: true, name: "层级1-1-1-2" },
                 component: () => import("@/components/level.vue")
               }
             ]

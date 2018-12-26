@@ -1,47 +1,52 @@
 <template>
   <div>
-    <user-select v-on:userSelect="user($event)"></user-select>
-    <date-select v-on:dateSelect="date($event)"></date-select>
-    <product-select v-on:productSelect="product($event)"></product-select>
-    <community-select v-on:communitySelect="community($event)"></community-select>
-    <pay-select v-on:paySelect="pay($event)"></pay-select>
-    <hl-select v-on:hlSelect="hl($event)"></hl-select>
-    <office-select v-on:officeSelect="office($event)"></office-select>
+    <el-form
+      v-for="p in permissionData"
+      :key="p.name"
+      class="table-group"
+      size="small"
+      @submit.native.prevent
+    >
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>{{p.pname}}</span>
+          <el-radio border label="全选"></el-radio>
+        </div>
+        <el-form-item :label="p.name">
+          <el-radio-group v-for="v in p.permission" :key="v" size="medium">
+            <el-radio border v-model="permission" v-if="v==0" :label="v">{{v}}查看</el-radio>
+            <el-radio border v-model="permission" v-if="v==1" :label="v">{{v}}控制</el-radio>
+            <el-radio border v-model="permission" v-if="v==2" :label="v">{{v}}删除</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-card>
+    </el-form>
   </div>
 </template>
 <script>
-import userSelect from "@/components/select/userSelect.vue";
-import dateSelect from "@/components/select/dateSelect.vue";
-import communitySelect from "@/components/select/communitySelect.vue";
-import productSelect from "@/components/select/productSelect.vue";
-import paySelect from "@/components/select/paySelect.vue";
-import hlSelect from "@/components/select/hlSelect.vue";
-import officeSelect from "@/components/select/officeSelect.vue";
 export default {
-  name: "group",
-  components: { userSelect,dateSelect,communitySelect,productSelect,paySelect,hlSelect,officeSelect },
-  methods: {
-    user(msg) {
-      console.log(msg)
-    },
-    date(msg) {
-      console.log(msg)
-    },
-    community(msg) {
-      console.log(msg)
-    },
-    product(msg) {
-      console.log(msg)
-    },
-    pay(msg) {
-      console.log(msg)
-    },
-    hl(msg) {
-      console.log(msg)
-    },
-    office(msg) {
-      console.log(msg)
-    }
+  data() {
+    return {
+      permissionData: [
+        {
+          pname: "首页",
+          name: "首页",
+          permission: [0, 1, 2]
+        },
+        {
+          pname: "业务管理",
+          name: "物产信息管理",
+          permission: [0, 1, 2]
+        }
+      ]
+    };
   }
 };
 </script>
+<style>
+.table-group {
+  background-color: beige;
+}
+</style>
+
+

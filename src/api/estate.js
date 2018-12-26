@@ -1,23 +1,23 @@
 export * from "./user.js";
 import ajax from "./ajax.js";
 
-export const getEstate = query => {
+export const getEstateType = query => {
   // query = qs.stringify(query);
-  return ajax.get("/product/listestate", query);
+  return ajax.get("/product/listestatetype", query);
 };
-export const getCommunity = query => {
+export const getCommunityTree = query => {
   // query = qs.stringify(query);
-  return ajax.get("/product/listcommunity", query);
+  return ajax.get("/community/gettree", query);
 };
 
-export const getcc = query => {
+export const getOfficeTree = query => {
   // query = qs.stringify(query);
-  return ajax.get("/product/listcc", query);
+  return ajax.get("/office/gettree", query);
 };
 
 export const getOffice = query => {
   // query = qs.stringify(query);
-  return ajax.get("/product/listoffice", query);
+  return ajax.get("/office/getlist", query);
 };
 
 export const addCommunity = query => {
@@ -27,7 +27,7 @@ export const addCommunity = query => {
     officeId: query.id
   };
   console.log(query);
-  return ajax.post("/product/addcommunity", req);
+  return ajax.post("/community/add", req);
 };
 
 export const updateCommunity = query => {
@@ -37,7 +37,7 @@ export const updateCommunity = query => {
     officeId: query.id
   };
   console.log(query);
-  return ajax.post("/product/updatecommunity", req);
+  return ajax.post("/community/update", req);
 };
 
 export const deleteCommunity = query => {
@@ -45,10 +45,15 @@ export const deleteCommunity = query => {
   var req = {
     id: query.id
   };
-  return ajax.post("/product/deletecommunity", req);
+  return ajax.post("/community/delete", req);
 };
 
 export const deleteManyCommunity = query => {
   // query = qs.stringify(query);
-  return ajax.post("/product/deletemanycommunity", query);
+  return ajax.post("/community/deletemany", query);
+};
+
+export const getEstate = query => {
+  // query = qs.stringify(query);
+  return ajax.get("/product/listestate", query);
 };

@@ -26,12 +26,14 @@ export default {
           </el-submenu>
         );
       } else {
-        return (
-          <el-menu-item index={route.path}>
-            <i class={route.meta.icon} />
-            {route.meta.name}
-          </el-menu-item>
-        );
+        if (!route.meta.hidden) {
+          return (
+            <el-menu-item index={route.path}>
+              <i class={route.meta.icon} />
+              {route.meta.name}
+            </el-menu-item>
+          );
+        }
       }
     }
   }

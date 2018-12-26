@@ -24,12 +24,12 @@ export const login = query => {
 
 export const get = query => {
   // query = qs.stringify(query);
-  return ajax.get("/user/get", query);
+  return ajax.get("/user/getlist", query);
 };
 
 export const getUser = query => {
   // query = qs.stringify(query);
-  return ajax.get("/user/list", query);
+  return ajax.get("/user/getlist", query);
 };
 
 export const activationUser = query => {

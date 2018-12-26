@@ -7,7 +7,7 @@
 
 
 <script>
-import { getCommunity } from "@/api/estate";
+import { getCommunityTree } from "@/api/estate";
 export default {
   name: "communitySelect",
   data() {
@@ -37,7 +37,7 @@ export default {
     //初始话下拉框的值
     this.options = [];
     //后台获取
-    getCommunity().then(res => {
+    getCommunityTree().then(res => {
       console.log(res);
       this.options = res.data.data.records;
     });
