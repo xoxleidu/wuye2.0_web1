@@ -2,7 +2,7 @@
   <div>111</div>
 </template>
 <script>
-import { getBuilding } from "@/api/estate";
+
 export default {
   data() {
     return {};
