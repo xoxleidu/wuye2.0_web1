@@ -33,6 +33,8 @@ export default {
               {route.meta.name}
             </el-menu-item>
           );
+        } else {
+          return "";
         }
       }
     }
