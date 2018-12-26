@@ -4,8 +4,12 @@ import main from "@/components/main/main";
 import NProgress from "nprogress"; // progress bar
 import { Message } from "element-ui";
 import store from "@/store";
+//引入路由
+import setting from "./modules/setting";
+import manageBusiness from "./modules/manageBusiness";
 Vue.use(Router);
 import "nprogress/nprogress.css";
+
 NProgress.configure({
   showSpinner: false
 }); // 隐藏右上loading图标
@@ -18,6 +22,7 @@ NProgress.configure({
       (3) ：icon 路由对应图标的class 或其他实现方式的图标（默认不配置）
       (4) ：name 路由对应的名称，用做呈现
       (5) : p 路由所需要的权限
+      (6) : hideInBread 在面包屑中是否可点击 默认为true
 */
 var routes = [
   {
@@ -36,6 +41,8 @@ var routes = [
     meta: { hidden: true },
     component: () => import("@/views/login.vue")
   },
+  setting,
+  manageBusiness,
   {
     path: "/test",
     component: main,
@@ -63,135 +70,6 @@ var routes = [
       {
         path: "",
         component: () => import("@/views/zujian.vue")
-      }
-    ]
-  },
-  {
-    path: "/manageBusiness",
-    name: "业务管理",
-    component: main,
-    meta: { name: "业务管理" },
-    children: [
-      {
-        path: "/manageBusiness/community",
-        name: "community",
-        meta: { name: "物产管理",single:true },
-        component: () => import("@/views/manageBusiness/community.vue"),
-        children: [
-          {
-            path: "/manageBusiness/estate",
-            name: "estate",
-            meta: { name: "物产详情"},
-            component: () => import("@/views/manageBusiness/estate.vue")
-          }
-        ]
-      },
-      {
-        path: "/manageBusiness/chargingitems",
-        name: "chargingitems",
-        meta: { name: "收费项管理"},
-        component: () => import("@/views/manageBusiness/chargingitems.vue")
-      }
-    ]
-  },
-  {
-    path: "/manageSys",
-    name: "系统管理",
-    component: main,
-    meta: { name: "系统管理" },
-    children: [
-      {
-        path: "/manageSys/user",
-        name: "user",
-        meta: { name: "用户管理" },
-        component: () => import("@/views/manageSys/user/user.vue")
-      },
-      {
-        path: "/manageSys/group",
-        name: "group",
-        meta: { name: "权限管理" },
-        component: () => import("@/views/manageSys/group.vue")
-      },
-      {
-        path: "/manageSys/passWord",
-        name: "passWord",
-        meta: { name: "修改密码" },
-        component: () => import("@/views/manageSys/passWord.vue")
-      }
-    ]
-  },
-  {
-    path: "/common",
-    component: main,
-    meta: { name: "通用", icon: "el-icon-star-on" },
-    children: [
-      {
-        path: "/home",
-        component: () => import("@/views/home.vue"),
-        meta: { name: "首页1" }
-      },
-      {
-        path: "/common/table",
-        meta: { name: "表格" },
-        component: () => import("@/views/table.vue")
-      },
-      {
-        path: "/common/form",
-        meta: { name: "表单" },
-        component: () => import("@/views/form.vue")
-      }
-    ]
-  },
-  {
-    path: "/rights",
-    component: main,
-    meta: { name: "权限控制", icon: "el-icon-setting" },
-    children: [
-      {
-        path: "/hasRight",
-        component: () => import("@/views/home.vue"),
-        meta: { name: "有权限" }
-      },
-      {
-        path: "/noRight",
-        component: () => import("@/views/home.vue"),
-        meta: { name: "无权限", p: "123asdad" }
-      }
-    ]
-  },
-  {
-    path: "/level",
-    component: main,
-    meta: { name: "level1" },
-    children: [
-      {
-        path: "/level1-1",
-        meta: { name: "层级1-1" },
-        component: () => import("@/components/level.vue"),
-        children: [
-          {
-            path: "/level1-1-1",
-            meta: { name: "层级1-1-1" },
-            component: () => import("@/components/level.vue"),
-            children: [
-              {
-                path: "/level1-1-1-1",
-                meta: { name: "层级1-1-1-1" },
-                component: () => import("@/components/level.vue")
-              },
-              {
-                path: "/level1-1-1-2",
-                meta: { hidden: true, name: "层级1-1-1-2" },
-                component: () => import("@/components/level.vue")
-              }
-            ]
-          }
-        ]
-      },
-      {
-        path: "/level1-2",
-        meta: { name: "层级1-2" },
-        component: () => import("@/components/level.vue")
       }
     ]
   },

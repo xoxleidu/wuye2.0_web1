@@ -14,7 +14,6 @@
   </div>
 </template>
 <script>
-//import {timestampToTime} from "@/utils/date.js";
 import { Message } from "element-ui";
 export default {
   data() {
@@ -59,7 +58,7 @@ export default {
   },
   watch: {
     dateSelect(value) {
-      console.log(value)
+      console.log(value);
       if (value[0].valueOf() != value[1].valueOf()) {
         var val = {
           startTime: Date.parse(this.dateSelect[0]) / 1000,
@@ -68,7 +67,7 @@ export default {
         this.$emit("dateSelect", val);
       } else {
         Message({
-          message: '起始时间不能一样',
+          message: "起始时间不能一样",
           type: "error",
           duration: 5 * 1000
         });
