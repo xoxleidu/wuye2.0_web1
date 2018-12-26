@@ -43,14 +43,12 @@
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="id" label="ID" sortable width="60"></el-table-column>
-      <el-table-column prop="name" label="昵称" width="90"></el-table-column>
-      <el-table-column align="center" prop="userName" label="用户名" width="160"></el-table-column>
-      <el-table-column prop="passWord" label="密码" width="120"></el-table-column>
-      <el-table-column prop="group" label="分组" width="110"></el-table-column>
+      <el-table-column align="center" prop="username" label="用户名" width="160"></el-table-column>
+      <el-table-column prop="roleName" label="分组" width="110"></el-table-column>
       <el-table-column align="center" label="激活" width="110">
         <template slot-scope="scope">
           <el-switch
-            v-model="scope.row.state"
+            v-model="scope.row.status"
             @change="userActivation(scope.row)"
             :active-value="0"
             :inactive-value="1"
@@ -197,32 +195,13 @@ export default {
         }*/
 
       listLoading: true,
-      tableData: [
-        {
-          id: 1,
-          name: "", //昵称
-          userName: "", //用户名
-          passWord: "", //密码
-          state: 0, //状态
-          group: 0 //分组
-        }
-      ],
+      tableData: {},
       multipleSelection: [],
       total: 5,
       currentPage: undefined,
       pageSize: 5,
 
-      temp: {
-        id: undefined,
-        name: "", //昵称
-        userName: "", //用户名
-        passWord: "", //密码
-        state: 0, //状态
-        group: 0, //分组
-        phone: "", //..电话
-        card: "", //..身份证
-        position: "" //职位
-      },
+      temp: {},
       dialogStatus: "",
       dialogFormVisible: false,
       dialogImgVisible: false,
@@ -241,17 +220,7 @@ export default {
   methods: {
     //重置数据
     resetTemp() {
-      this.temp = {
-        id: undefined,
-        name: "", //昵称
-        userName: "", //用户名
-        passWord: "", //密码
-        state: 0, //状态
-        group: 0, //分组
-        phone: "", //..电话
-        card: "", //..身份证
-        position: "" //职位
-      };
+      this.temp = {};
     },
 
     //用户激活
@@ -398,15 +367,15 @@ export default {
         this.listLoading = false;
         //   this.total = res.data.total;
         //   this.currentPage = res.data.current;
-        this.tableData = res.data.data.records;
+        this.tableData = res.data.data;
       });
     },
     //添加数据
     createData() {
       console.log(this.temp);
       addUser(this.temp).then(res => {
-        if (res.code == "0000") {
-          this.temp.id = res.data.data.records;
+        if (res.code == 0) {
+          this.temp.id = res.data.data;
           this.tableData.unshift(this.temp);
           this.dialogFormVisible = false;
           this.$notify({
@@ -443,7 +412,7 @@ export default {
     updateData() {
       console.log(this.temp);
       updateUser(this.temp).then(res => {
-        if (res.code == "0000") {
+        if (res.code == 0) {
           for (const v of this.tableData) {
             if (v.id === this.temp.id) {
               const index = this.tableData.indexOf(v);
@@ -472,7 +441,7 @@ export default {
     //删除单个
     handleDelete(row) {
       deleteUser(row.id).then(res => {
-        if (res.code == "0000") {
+        if (res.code == 0) {
           const index = this.tableData.indexOf(row);
           this.tableData.splice(index, 1);
           this.$notify({

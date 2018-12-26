@@ -55,7 +55,7 @@
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="communityName" label="小区名称"></el-table-column>
-      <el-table-column prop="label" label="所属办公室"></el-table-column>
+      <el-table-column prop="officeName" label="所属办公室"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="small" @click="handleUpdata(scope)" type="primary">修改</el-button>
@@ -74,6 +74,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         background
       ></el-pagination>
+      
       <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
         <el-form
           ref="dataForm"
@@ -93,9 +94,14 @@
             </el-col>
           </el-row>
           <el-row :gutter="20" class="form-row">
-            <el-col :span="24">
-              <div>
-                <el-input v-model="temp.label" :disabled="dialogStatus==='create'? false : true"/>
+            <el-col :span="3">
+              <div class="from-left-title">所属办公室</div>
+            </el-col>
+            <el-col :span="16">
+              <div>{{temp.officeName}}
+                <!-- v-on:officeSelect="office($event)" -->
+                
+                <office-select v-model="temp.officeName" @change="setOffice($event)"></office-select>
               </div>
             </el-col>
           </el-row>
@@ -114,18 +120,21 @@
 
 <script>
 import {
-  getOffice,
+  getCommunity,
   addCommunity,
   updateCommunity,
   deleteCommunity,
   deleteManyCommunity
 } from "@/api/estate";
+import officeSelect from "@/components/select/officeSelect.vue";
 export default {
+  components: { officeSelect },
   created() {
     this.getTable();
   },
   data() {
     return {
+      restData: "",
       isCollapse: false,
       tableLoading: false,
       tableQuery: {
@@ -151,7 +160,7 @@ export default {
     // 查询信息
     getTable() {
       this.tableLoading = true;
-      getOffice()
+      getCommunity()
         .then(res => {
           this.tableLoading = false;
           console.log(res.data.data.total);
@@ -166,6 +175,13 @@ export default {
           this.tableLoading = false;
           console.warn(err);
         });
+    },
+    //选择办公室
+    office(msg) {
+      console.log(msg);
+    },
+    setOffice(msg) {
+      console.log(msg);
     },
     //添加数据
     handleCreate() {
@@ -205,7 +221,8 @@ export default {
     //修改数据
     handleUpdata(scope) {
       console.log(scope);
-      this.temp = Object.assign({}, scope.row);
+      //this.temp = Object.assign({}, scope.row);
+      this.temp = scope.row;
       this.dialogStatus = "update";
       this.dialogbutton = "update";
       this.dialogFormVisible = true;

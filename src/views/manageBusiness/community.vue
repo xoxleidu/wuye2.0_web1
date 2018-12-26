@@ -69,7 +69,7 @@
         </el-header>
         <el-main>
           <office-select v-on:officeSelect="office($event)"></office-select>
-          <router-link :to="'/manageBusiness/estate'">{{testId}}</router-link>
+          <router-link :to="'/manageBusiness/estate?conmmunityId=' + testId">{{testId}}</router-link>
         </el-main>
       </el-main>
     </el-container>
