@@ -104,7 +104,7 @@ var routes = [
         path: "/manageSys/user",
         name: "user",
         meta: { name: "用户管理" },
-        component: () => import("@/views/manageSys/user.vue")
+        component: () => import("@/views/manageSys/user/user.vue")
       },
       {
         path: "/manageSys/group",

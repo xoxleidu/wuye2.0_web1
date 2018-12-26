@@ -22,14 +22,14 @@ export const login = query => {
   return ajax.post("/user/login", query);
 };
 
-export const get = query => {
+export const getUserlist = query => {
   // query = qs.stringify(query);
-  return ajax.get("/user/getlist", query);
+  return ajax.get("/users/", query);
 };
 
 export const getUser = query => {
   // query = qs.stringify(query);
-  return ajax.get("/user/getlist", query);
+  return ajax.get("/users/", query);
 };
 
 export const activationUser = query => {
