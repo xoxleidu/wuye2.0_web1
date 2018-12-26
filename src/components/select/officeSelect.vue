@@ -14,15 +14,13 @@ export default {
   name: "officeSelect",
   data() {
     return {
-      selectOffice: "",
+      selectOffice: this.value? this.value : "",
       options: {}
     };
   },
   props: {
     value: {
-      type: Number,
-      default: ""
-
+      type: String
     }, //接受外部v-model传入的值
     fileType: {
       type: Object
@@ -37,9 +35,9 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     //初始话下拉框的值
-    this.selectOffice = this.value;
+    //this.selectOffice = this.value;
     console.log("传过来的值");
     console.log(this.selectOffice);
     //this.options = {};

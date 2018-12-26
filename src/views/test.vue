@@ -74,6 +74,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         background
       ></el-pagination>
+      
       <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
         <el-form
           ref="dataForm"
@@ -93,10 +94,14 @@
             </el-col>
           </el-row>
           <el-row :gutter="20" class="form-row">
-            <el-col :span="24">
-              <div>
+            <el-col :span="3">
+              <div class="from-left-title">所属办公室</div>
+            </el-col>
+            <el-col :span="16">
+              <div>{{temp.officeName}}
                 <!-- v-on:officeSelect="office($event)" -->
-                <office-select v-model="temp.officeName"  @change="setOffice($event)"></office-select>
+                
+                <office-select v-model="temp.officeName" @change="setOffice($event)"></office-select>
               </div>
             </el-col>
           </el-row>
@@ -123,12 +128,13 @@ import {
 } from "@/api/estate";
 import officeSelect from "@/components/select/officeSelect.vue";
 export default {
-  components:{officeSelect},
+  components: { officeSelect },
   created() {
     this.getTable();
   },
   data() {
     return {
+      restData: "",
       isCollapse: false,
       tableLoading: false,
       tableQuery: {
@@ -171,11 +177,11 @@ export default {
         });
     },
     //选择办公室
-    office(msg){
-      console.log(msg)
+    office(msg) {
+      console.log(msg);
     },
-    setOffice(msg){
-      console.log(msg)
+    setOffice(msg) {
+      console.log(msg);
     },
     //添加数据
     handleCreate() {
@@ -215,7 +221,8 @@ export default {
     //修改数据
     handleUpdata(scope) {
       console.log(scope);
-      this.temp = Object.assign({}, scope.row);
+      //this.temp = Object.assign({}, scope.row);
+      this.temp = scope.row;
       this.dialogStatus = "update";
       this.dialogbutton = "update";
       this.dialogFormVisible = true;
