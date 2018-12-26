@@ -19,8 +19,10 @@ export default {
     };
   },
   props: {
-    val: {
-      type: String
+    value: {
+      type: Number,
+      default: ""
+
     }, //接受外部v-model传入的值
     fileType: {
       type: Object
@@ -31,13 +33,16 @@ export default {
     selectOffice(val, oldVal) {
       console.log("new: %s, old: %s", val, oldVal);
       if (val != oldVal) {
-        this.$emit("officeSelect", this.selectOffice);
+        this.$emit("change", this.selectOffice);
       }
     }
   },
   mounted() {
     //初始话下拉框的值
-    this.options = {};
+    this.selectOffice = this.value;
+    console.log("传过来的值");
+    console.log(this.selectOffice);
+    //this.options = {};
     //后台获取
     getOffice().then(res => {
       console.log(res);
@@ -51,7 +56,7 @@ export default {
       for (let i = 0; i < data.length; i++) {
         _data[i] = {};
         _data[i].label = data[i].label;
-        _data[i].value = data[i].id;
+        _data[i].value = data[i].officeId;
       }
       return _data;
     }
