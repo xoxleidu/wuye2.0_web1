@@ -13,11 +13,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="角色" prop="roleId">
-            <el-select v-model="postData.roleId" class="base-select">
-              <el-option value="1" label="处长"></el-option>
-              <el-option value="2" label="科长"></el-option>
-              <el-option value="3" label="职员"></el-option>
-            </el-select>
+            <dict-select class="base-select" v-model="postData.roleId" :dict="$dict.ROLE_MODE"></dict-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -67,7 +63,9 @@
 
 <script>
 import { addUser } from "@/api/index.js";
+import dictSelect from "@/components/select/dict-select.vue";
 export default {
+  components: { dictSelect },
   data() {
     var validatePass = (rule, value, callback) => {
       if (value === "") {
@@ -101,6 +99,8 @@ export default {
         status: 1
       },
       rules: {
+        roleId: [this.$rules.required],
+        officeId: [this.$rules.required],
         username: [this.$rules.required, this.$rules.length({ min: 6 })],
         password: [
           this.$rules.required,
@@ -113,7 +113,6 @@ export default {
       }
     };
   },
-
   methods: {
     handleSubmit() {
       this.$refs["postForm"].validate(valid => {

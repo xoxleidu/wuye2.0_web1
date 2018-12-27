@@ -1,6 +1,6 @@
 export default {
   required: {
-    trigger: "blur",
+    trigger: "change",
     required: true,
     message: "必填项，必须填写/选择该项！"
   },
@@ -8,7 +8,7 @@ export default {
     var reg = /^([1-9]\d*|0)(\.\d*)?$/;
     var msg = "请填写正确的小数格式";
     return {
-      trigger: "blur",
+      trigger: "change",
       validator: (rule, value, callback) => {
         if (!reg.test(value)) {
           callback(new Error(msg));
@@ -36,7 +36,7 @@ export default {
       min: min,
       max: max,
       message: msg,
-      trigger: "blur"
+      trigger: "change"
     };
   }
 };

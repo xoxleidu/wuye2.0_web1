@@ -57,8 +57,21 @@ var dict = {
       label: "2222",
       value: 1
     }
+  ],
+  ROLE_MODE: [
+    {
+      label: "test",
+      value: 0
+    },
+    {
+      label: "业务员",
+      value: 1
+    },
+    {
+      label: "AAA",
+      value: 2
+    }
   ]
-
 };
 if (process.env.NODE_ENV == "production") {
   dict = Object.assign(dict, window.SITE_CONFIG);
