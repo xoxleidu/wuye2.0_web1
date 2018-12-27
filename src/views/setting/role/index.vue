@@ -16,6 +16,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <role-select></role-select>
+          </el-col>
+          <el-col :span="6">
             <el-form-item>
               <el-button
                 type="primary"
@@ -41,22 +44,7 @@
       class="admin-table-list"
     >
       <el-table-column prop="username" label="用户名"></el-table-column>
-      <el-table-column prop="roleName" label="所属角色"></el-table-column>
-      <el-table-column prop="officeName" label="所属办公室"></el-table-column>
-      <el-table-column label="激活">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.status"
-            @change="userActivation(scope.row)"
-            :active-value="0"
-            :inactive-value="1"
-            active-text="启用"
-            inactive-text="停用"
-            active-color="#13ce66"
-            inactive-color="#cbcbcb"
-          ></el-switch>
-        </template>
-      </el-table-column>
+      <el-table-column prop="username" label="用户名1"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="openEdit(scope)" icon="el-icon-edit">编辑</el-button>
@@ -103,12 +91,13 @@
 </template>
 
 <script>
-import { getUserList, activationUser } from "@/api/index.js";
+import { getUserList } from "@/api/index.js";
 import add from "./add.vue";
 import edit from "./edit.vue";
 import repassword from "./repassword.vue";
+import roleSelect from "@/components/select/role-select.vue";
 export default {
-  components: { add, edit, repassword },
+  components: { add, edit, repassword, roleSelect },
   created() {
     this.getTable();
   },
@@ -143,20 +132,6 @@ export default {
         name: "project",
         param: { vehicleId: scope.row.scopeId }
       });
-    },
-    //用户激活
-    userActivation(row) {
-      console.log(this)
-      activationUser(row)
-        .then(res => {
-          console.log(res);
-          
-        })
-        .catch(err => {
-          this.tableLoading = false;
-          
-          console.warn(err);
-        });
     },
     //添加
     openAdd() {

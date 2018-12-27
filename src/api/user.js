@@ -36,10 +36,19 @@ export const updatePassword = query => {
 };
 
 export const activationUser = query => {
-  var req = {
-    userId: query.id,
-    state: query.state
-  };
-  console.log(query);
-  return ajax.post("/user/activation", req);
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.patch(`/users/${query.userId}/`, query, {
+    params: {
+      m: "status"
+    }
+  });
+};
+
+
+/**
+ * 角色
+ */
+
+export const getRoleList = query => {
+  return ajax.get("/role/", query);
 };

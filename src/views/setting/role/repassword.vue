@@ -11,43 +11,19 @@
       @submit.native.prevent="handleSubmit"
     >
       <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="角色" prop="roleId">
-            <role-select class="base-select" v-model="postData.roleId"></role-select>
+        <el-col :span="24">
+          <el-form-item label="原密码" prop="userPwdOld">
+            <el-input type="password" v-model="postData.userPwdOld" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="所属办公室" prop="officeId">
-            <el-select v-model="postData.officeId" class="base-select">
-              <el-option value="1" label="处长"></el-option>
-              <el-option value="2" label="科长"></el-option>
-              <el-option value="3" label="职员"></el-option>
-            </el-select>
+        <el-col :span="24">
+          <el-form-item label="新密码" prop="userPwd">
+            <el-input type="password" v-model="postData.userPwd" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model="postData.username"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="密码" prop="password">
-            <el-input type="password" v-model="postData.password" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="重复密码" prop="checkPass">
+        <el-col :span="24">
+          <el-form-item label="重复新密码" prop="checkPass">
             <el-input type="password" v-model="postData.checkPass" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="身份证号" prop="idcard">
-            <el-input v-model="postData.idcard"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="联系电话" prop="mobile">
-            <el-input v-model="postData.mobile"></el-input>
           </el-form-item>
         </el-col>
         <el-col>
@@ -62,10 +38,8 @@
 </template>
 
 <script>
-import { addUser } from "@/api/index.js";
-import roleSelect from "@/components/select/role-select.vue";
+import { updatePassword } from "@/api/index.js";
 export default {
-  components: { roleSelect },
   data() {
     var validatePass = (rule, value, callback) => {
       if (value === "") {
@@ -80,7 +54,7 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.postData.password) {
+      } else if (value !== this.postData.userPwd) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
@@ -89,20 +63,14 @@ export default {
     return {
       loading: false,
       postData: {
-        username: "",
-        password: "",
-        checkPass: "",
-        idcard: "",
-        mobile: "",
-        offceId: "",
-        roleId: "",
-        status: 1
+        userId: "",
+        userPwdOld: "",
+        userPwd: "",
+        checkPass: ""
       },
       rules: {
-        roleId: [this.$rules.required],
-        officeId: [this.$rules.required],
-        username: [this.$rules.required, this.$rules.length({ min: 6 })],
-        password: [
+        userPwdOld: [this.$rules.required],
+        userPwd: [
           this.$rules.required,
           { validator: validatePass, trigger: "blur" }
         ],
@@ -113,13 +81,17 @@ export default {
       }
     };
   },
+  props: ["id"],
+  created() {
+    this.postData.userId = this.$props.id;
+    console.log(this.postData.userId);
+  },
   methods: {
     handleSubmit() {
       this.$refs["postForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          
-          addUser(this.postData)
+          updatePassword(this.postData)
             .then(res => {
               this.$utils.callResponse(this, res);
             })
@@ -136,5 +108,7 @@ export default {
 };
 </script>
 
+
 <style>
 </style>
+

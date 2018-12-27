@@ -13,7 +13,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="角色" prop="roleId">
-            <role-select class="base-select" v-model="postData.roleId"></role-select>
+            <dict-select class="base-select" v-model="postData.roleId" :dict="$dict.ROLE_MODE"></dict-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -28,6 +28,16 @@
         <el-col :span="12">
           <el-form-item label="用户名" prop="username">
             <el-input v-model="postData.username"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="密码" prop="password">
+            <el-input type="password" v-model="postData.password" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="重复密码" prop="checkPass">
+            <el-input type="password" v-model="postData.checkPass" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -52,16 +62,36 @@
 </template>
 
 <script>
-import { updateUser, getUser } from "@/api/index.js";
-import roleSelect from "@/components/select/role-select.vue";
+import { addUser } from "@/api/index.js";
+import dictSelect from "@/components/select/dict-select.vue";
 export default {
-  components: { roleSelect },
+  components: { dictSelect },
   data() {
+    var validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        if (this.postData.checkPass !== "") {
+          this.$refs.postForm.validateField("checkPass");
+        }
+        callback();
+      }
+    };
+    var validatePass2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.postData.password) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
     return {
       loading: false,
       postData: {
-        userId: "",
         username: "",
+        password: "",
+        checkPass: "",
         idcard: "",
         mobile: "",
         offceId: "",
@@ -69,26 +99,26 @@ export default {
         status: 1
       },
       rules: {
-        username: [this.$rules.required, this.$rules.length({ min: 6 })]
+        roleId: [this.$rules.required],
+        officeId: [this.$rules.required],
+        username: [this.$rules.required, this.$rules.length({ min: 6 })],
+        password: [
+          this.$rules.required,
+          { validator: validatePass, trigger: "blur" }
+        ],
+        checkPass: [
+          this.$rules.required,
+          { validator: validatePass2, trigger: "blur" }
+        ]
       }
     };
-  },
-  props: ["id"],
-  created() {
-    this.postData.userId = this.$props.id;
-    getUser(this.$props.id).then(res => {
-      if (res.data.code == 0) {
-        Object.assign(this.postData, res.data.data);
-      }
-    });
   },
   methods: {
     handleSubmit() {
       this.$refs["postForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          console.log(this.postData)
-          updateUser(this.postData)
+          addUser(this.postData)
             .then(res => {
               this.$utils.callResponse(this, res);
             })

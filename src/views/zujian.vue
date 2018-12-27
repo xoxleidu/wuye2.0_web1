@@ -9,6 +9,8 @@
     <enable-select v-on:enableSelect="enable($event)"></enable-select>
     <office-select v-on:officeSelect="office($event)"></office-select>
     <pricingModel-select v-on:pricingmodelSelect="pricingmodel($event)"></pricingModel-select>
+    <dict-select class="base-select" v-model="testData" :dict="$dict.ROLE_MODE"></dict-select>
+    <role-select class="base-select" v-model="testData"></role-select>
   </div>
 </template>
 <script>
@@ -21,6 +23,8 @@ import hlSelect from "@/components/select/hlSelect.vue";
 import officeSelect from "@/components/select/officeSelect.vue";
 import enableSelect from "@/components/select/enableSelect.vue";
 import pricingModelSelect from "@/components/select/pricingModelSelect.vue";
+import dictSelect from "@/components/select/dict-select.vue";
+import roleSelect from "@/components/select/role-select.vue";
 export default {
   name: "group",
   components: {
@@ -32,7 +36,14 @@ export default {
     hlSelect,
     officeSelect,
     enableSelect,
-    pricingModelSelect
+    pricingModelSelect,
+    dictSelect,
+    roleSelect
+  },
+  data(){
+    return {
+      testData:""
+    }
   },
   methods: {
     user(msg) {
