@@ -20,10 +20,10 @@ export default {
     };
   },
   watch: {
-    value: function(newVal,oldVal) {
+    value: function(newVal) {
       this.selected = newVal;
     },
-    selected: function(newVal, oldVal) {
+    selected: function(newVal) {
       //console.log("new: %s, old: %s", newVal, oldVal);
       this.$emit("input", newVal);
     }
