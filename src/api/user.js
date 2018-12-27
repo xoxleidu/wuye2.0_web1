@@ -1,74 +1,45 @@
 //user API
 import ajax from "./ajax.js";
-// import qs from "qs";
 //用户管理
-// export const getUser = query => {
-//   query = Object.assign(
-//     {
-//       page: 1,
-//       size: 10,
-//       user_name: ""
-//     },
-//     query
-//   );
-//   return ajax.get("/list", {
-//     params: query
-//   });
-// };
-
-
-
 export const login = query => {
-  return ajax.post("/user/login", query);
+  return ajax.post("/login/", query);
 };
 
-export const getUserlist = query => {
-  // query = qs.stringify(query);
+export const getUserList = query => {
   return ajax.get("/users/", query);
 };
 
-export const getUser = query => {
-  // query = qs.stringify(query);
-  return ajax.get("/users/", query);
-};
-
-export const activationUser = query => {
-  // query = qs.stringify(query);
-  var req = {
-    userId:query.id,
-    state:query.state
-  }
-  console.log(query)
-  return ajax.post("/user/activation",req);
+export const getUser = userId => {
+  return ajax.get(`/users/${userId}`);
 };
 
 export const addUser = query => {
-  // query = qs.stringify(query);
-  return ajax.post("/user/add", query);
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/users/", query);
 };
 
 export const updateUser = query => {
-  // query = qs.stringify(query);
-  return ajax.post("/user/update", query);
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.put(`/users/${query.userId}/`, query);
 };
 
-export const deleteUser = query => {
-  // query = qs.stringify(query);
-  return ajax.post("/user/delete", query);
+export const deleteUser = userId => {
+  return ajax.delete(`/users/${userId}`);
+};
+export const updatePassword = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.patch(`/users/${query.userId}/`, query, {
+    params: {
+      m: "password"
+    }
+  });
 };
 
-export const deleteManyUser = query => {
-  // query = qs.stringify(query);
-  return ajax.post("/user/deletemany", query);
-};
-
-
-
-export const verifyPassWord = date => {
-  // query = qs.stringify(query);
-  return ajax.post("/user/verpass", date);
-};
-export const updatePassWord = date => {
-  // query = qs.stringify(query);
-  return ajax.post("/user/updatepassword", date);
+export const activationUser = query => {
+  var req = {
+    userId: query.id,
+    state: query.state
+  };
+  console.log(query);
+  return ajax.post("/user/activation", req);
 };

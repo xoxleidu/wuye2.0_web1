@@ -35,7 +35,6 @@
 }
 </style>
 <script>
-import { rules } from "@/utils/rules.js";
 import { login } from "@/api/index.js";
 import "@/utils/md5.js";
 export default {
@@ -46,22 +45,7 @@ export default {
         user_name: "",
         pass_word: ""
       },
-      rules: {
-        ...rules,
-        user_name: [
-          { required: true, message: "用户名不能为空", trigger: "change" }
-        ],
-        pass_word: [
-          {
-            required: true,
-            min: 3,
-            max: 20,
-            message: "密码长度在 3 到 20 个字符",
-            trigger: "change",
-            validator: this.validatePassword
-          }
-        ]
-      }
+      rules: {}
     };
   },
 

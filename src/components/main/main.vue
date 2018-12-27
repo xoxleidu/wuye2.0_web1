@@ -78,9 +78,7 @@ export default {
       });
     }
   },
-  created() {
-    console.log(this.$router);
-  },
+  created() {},
   components: { slideMenu },
   methods: {
     loginOut() {

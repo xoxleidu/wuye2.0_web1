@@ -28,5 +28,15 @@ export default {
     var m = date.getMinutes() + ":";
     var s = date.getSeconds();
     return Y + M + D + h + m + s;
+  },
+  callResponse(vm, res) {
+    vm.loading = false;
+    if (res.data.code == 0) {
+      vm.$emit("success");
+      vm.$emit("end");
+      vm.$message({ message: res.data.msg, type: "success" });
+    } else {
+      vm.$message({ message: res.data.msg, type: "error" });
+    }
   }
 };

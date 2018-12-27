@@ -9,7 +9,7 @@ export default {
       path: "/setting/user",
       name: "user",
       meta: { name: "用户管理" },
-      component: () => import("@/views/setting/user/user.vue")
+      component: () => import("@/views/setting/user/index.vue")
     },
     {
       path: "/setting/role",
