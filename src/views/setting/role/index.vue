@@ -16,9 +16,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <role-select></role-select>
-          </el-col>
-          <el-col :span="6">
             <el-form-item>
               <el-button
                 type="primary"
@@ -47,8 +44,8 @@
       <el-table-column prop="menuName" label="对应权限"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="openEdit(scope)" icon="el-icon-edit">编辑</el-button>
-          <el-button size="mini" @click="openRepassword(scope)" icon="el-icon-edit" type="danger">删除</el-button>
+          <el-button size="mini" @click="openEdit(scope)" icon="el-icon-edit" type="success">编辑</el-button>
+          <el-button size="mini" @click="delRow(scope)" icon="el-icon-edit" type="danger">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -79,25 +76,16 @@
         @end="()=>{this.editDialog=false;this.editId='';}"
       ></edit>
     </el-dialog>
-    <el-dialog title="修改密码" :visible.sync="repasswordDialog" width="40%" center>
-      <repassword
-        :key="addKey"
-        :id="editId"
-        @success="()=>{this.getTable();this.editDialog=false;this.editId='';}"
-        @end="()=>{this.repasswordDialog=false;this.editId='';}"
-      ></repassword>
-    </el-dialog>
+    
   </div>
 </template>
 
 <script>
-import { getUserList } from "@/api/index.js";
+import { getRoleList, deleteRole } from "@/api/index.js";
 import add from "./add.vue";
 import edit from "./edit.vue";
-import repassword from "./repassword.vue";
-import roleSelect from "@/components/select/role-select.vue";
 export default {
-  components: { add, edit, repassword, roleSelect },
+  components: { add, edit },
   created() {
     this.getTable();
   },
@@ -112,7 +100,7 @@ export default {
       tableQuery: {
         page: 1,
         size: 10,
-        userName: ""
+        roleName: ""
       },
       tableData: {
         data: [],
@@ -142,19 +130,14 @@ export default {
     //编辑
     openEdit(scope) {
       this.addKey++;
-      this.editId = scope.row.userId;
+      this.editId = scope.row.roleId;
       this.editDialog = true;
     },
-    //修改密码
-    openRepassword(scope) {
-      this.addKey++;
-      this.editId = scope.row.userId;
-      this.repasswordDialog = true;
-    },
+    
     // 查询信息
     getTable() {
       this.tableLoading = true;
-      getUserList(this.tableQuery)
+      getRoleList(this.tableQuery)
         .then(res => {
           this.tableLoading = false;
           var result = [];
@@ -184,10 +167,19 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
+          deleteRole(scope.row.roleId)
+            .then(() => {
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+            })
+            .catch(err => {
+              this.$message({
+                type: "info",
+                message: err.msg
+              });
+            });
         })
         .catch(() => {
           this.$message({

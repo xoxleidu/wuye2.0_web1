@@ -14,8 +14,8 @@ export default {
     {
       path: "/setting/role",
       name: "role",
-      meta: { name: "权限管理" },
-      component: () => import("@/views/setting/role.vue")
+      meta: { name: "角色管理" },
+      component: () => import("@/views/setting/role/index.vue")
     }
   ]
 };

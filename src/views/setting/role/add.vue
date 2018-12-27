@@ -12,44 +12,28 @@
     >
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="角色" prop="roleId">
-            <dict-select class="base-select" v-model="postData.roleId" :dict="$dict.ROLE_MODE"></dict-select>
+          <el-form-item label="角色名" prop="roleName">
+            <el-input v-model="postData.roleName"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="所属办公室" prop="officeId">
-            <el-select v-model="postData.officeId" class="base-select">
-              <el-option value="1" label="处长"></el-option>
-              <el-option value="2" label="科长"></el-option>
-              <el-option value="3" label="职员"></el-option>
-            </el-select>
+        <el-col :span="24">
+          <el-form-item prop="permission" v-for="p in postData.permission" :key="p.id">
+            <el-card class="box-card">
+              <div slot="header" class="clearfix">
+                <span>{{p.pname}}</span>
+                <el-radio border label="全选"></el-radio>
+              </div>
+              <el-form-item :label="p.name">
+                <el-radio-group v-for="v in p.permission" :key="v" size="medium">
+                  <el-radio border v-model="permission" v-if="v==0" :label="v">{{v}}查看</el-radio>
+                  <el-radio border v-model="permission" v-if="v==1" :label="v">{{v}}控制</el-radio>
+                  <el-radio border v-model="permission" v-if="v==2" :label="v">{{v}}删除</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-card>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model="postData.username"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="密码" prop="password">
-            <el-input type="password" v-model="postData.password" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="重复密码" prop="checkPass">
-            <el-input type="password" v-model="postData.checkPass" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="身份证号" prop="idcard">
-            <el-input v-model="postData.idcard"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="联系电话" prop="mobile">
-            <el-input v-model="postData.mobile"></el-input>
-          </el-form-item>
-        </el-col>
+
         <el-col>
           <el-form-item>
             <el-button type="primary" native-type="submit" :loading="loading">提交</el-button>
@@ -62,54 +46,29 @@
 </template>
 
 <script>
-import { addUser } from "@/api/index.js";
-import dictSelect from "@/components/select/dict-select.vue";
+import { addRole } from "@/api/index.js";
 export default {
-  components: { dictSelect },
   data() {
-    var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.postData.checkPass !== "") {
-          this.$refs.postForm.validateField("checkPass");
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.postData.password) {
-        callback(new Error("两次输入密码不一致!"));
-      } else {
-        callback();
-      }
-    };
     return {
       loading: false,
       postData: {
-        username: "",
-        password: "",
-        checkPass: "",
-        idcard: "",
-        mobile: "",
-        offceId: "",
-        roleId: "",
-        status: 1
+        roleName: "",
+        permission: [
+        {
+          pname: "首页",
+          name: "首页",
+          permission: [0, 1, 2]
+        },
+        {
+          pname: "业务管理",
+          name: "物产信息管理",
+          permission: [0, 1, 2]
+        }
+      ]
       },
       rules: {
         roleId: [this.$rules.required],
-        officeId: [this.$rules.required],
-        username: [this.$rules.required, this.$rules.length({ min: 6 })],
-        password: [
-          this.$rules.required,
-          { validator: validatePass, trigger: "blur" }
-        ],
-        checkPass: [
-          this.$rules.required,
-          { validator: validatePass2, trigger: "blur" }
-        ]
+        roleName: [this.$rules.required, this.$rules.length({ min: 6 })]
       }
     };
   },
@@ -118,7 +77,7 @@ export default {
       this.$refs["postForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          addUser(this.postData)
+          addRole(this.postData)
             .then(res => {
               this.$utils.callResponse(this, res);
             })

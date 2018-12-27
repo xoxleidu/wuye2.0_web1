@@ -12,36 +12,25 @@
     >
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="角色" prop="roleId">
-            <el-select v-model="postData.roleId" class="base-select">
-              <el-option value="1" label="处长"></el-option>
-              <el-option value="2" label="科长"></el-option>
-              <el-option value="3" label="职员"></el-option>
-            </el-select>
+          <el-form-item label="角色名" prop="roleName">
+            <el-input v-model="postData.roleName"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="所属办公室" prop="officeId">
-            <el-select v-model="postData.officeId" class="base-select">
-              <el-option value="1" label="处长"></el-option>
-              <el-option value="2" label="科长"></el-option>
-              <el-option value="3" label="职员"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model="postData.username"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="身份证号" prop="idcard">
-            <el-input v-model="postData.idcard"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="联系电话" prop="mobile">
-            <el-input v-model="postData.mobile"></el-input>
+        <el-col :span="24">
+          <el-form-item prop="permission" v-for="p in postData" :key="p.id">
+            <el-card class="box-card">
+              <div slot="header" class="clearfix">
+                <span>{{p.pname}}</span>
+                <el-radio border label="全选"></el-radio>
+              </div>
+              <el-form-item :label="p.name">
+                <el-radio-group v-for="v in p.permission" :key="v" size="medium">
+                  <el-radio border v-model="permission" v-if="v==0" :label="v">{{v}}查看</el-radio>
+                  <el-radio border v-model="permission" v-if="v==1" :label="v">{{v}}控制</el-radio>
+                  <el-radio border v-model="permission" v-if="v==2" :label="v">{{v}}删除</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-card>
           </el-form-item>
         </el-col>
         <el-col>
@@ -56,20 +45,79 @@
 </template>
 
 <script>
-import { updateUser, getUser } from "@/api/index.js";
+/*
+ *函数定义
+ *入口参数data,平行数组
+ *key，id字段
+ *parentKey，父字段
+ *map,需要将原始属性名称转换为什么名称
+ */
+function treeUtil(data, key, parentKey, map) {
+	this.data = data;
+	this.key = key;
+	this.parentKey = parentKey;
+	this.treeParentKey = parentKey; //parentKey要转换成什么属性名称
+	this.treeKey = key; //key要转换成什么属性名称
+	this.map = map;
+	if(map) {
+		if(map[key]) this.treeKey = map[key];
+	}
+	this.toTree = function() {
+		var data = this.data;
+		var pos = {};
+		var tree = [];
+		var i = 0;
+		while(data.length != 0) {
+			if(data[i][this.parentKey] == 0) {
+				var _temp = this.copy(data[i]);
+				tree.push(_temp);
+				pos[data[i][this.key]] = [tree.length - 1];
+				data.splice(i, 1);
+				i--;
+			} else {
+				var posArr = pos[data[i][this.parentKey]];
+				if(posArr != undefined) {
+					var obj = tree[posArr[0]];
+					for(var j = 1; j < posArr.length; j++) {
+						obj = obj.children[posArr[j]];
+					}
+					var _temp = this.copy(data[i]);
+					obj.children.push(_temp);
+					pos[data[i][this.key]] = posArr.concat([obj.children.length - 1]);
+					data.splice(i, 1);
+					i--;
+				}
+			}
+			i++;
+			if(i > data.length - 1) {
+				i = 0;
+			}
+		}
+		return tree;
+	}
+	this.copy = function(item) {
+		var _temp = {
+			children: []
+		};
+		_temp[this.treeKey] = item[this.key];
+		for(var _index in item) {
+			if(_index != this.key && _index != this.parentKey) {
+				var _property = item[_index];
+				if((!!this.map) && this.map[_index])
+					_temp[this.map[_index]] = _property;
+				else
+					_temp[_index] = _property;
+			}
+		}
+		return _temp;
+	}
+}
+import { updateUser, getRole } from "@/api/index.js";
 export default {
   data() {
     return {
       loading: false,
-      postData: {
-        userId: "",
-        username: "",
-        idcard: "",
-        mobile: "",
-        offceId: "",
-        roleId: "",
-        status: 1
-      },
+      postData: {},
       rules: {
         username: [this.$rules.required, this.$rules.length({ min: 6 })]
       }
@@ -77,14 +125,55 @@ export default {
   },
   props: ["id"],
   created() {
-    this.postData.userId = this.$props.id;
-    getUser(this.$props.id).then(res => {
+    this.postData.roleId = this.$props.id;
+    getRole(this.$props.id).then(res => {
       if (res.data.code == 0) {
-        Object.assign(this.postData, res.data.data);
+        this.reconsData(res.data.data);
+        //Object.assign(this.postData, res.data.data);
       }
     });
   },
+
   methods: {
+    reconsData(data) {
+      var data = [
+        {
+          permissionId: 1,
+          parentId: 0,
+          name: "首页"
+        },
+        {
+          permissionId: 2,
+          parentId: 1,
+          name: "aaa"
+        },
+        {
+          permissionId: 3,
+          parentId: 1,
+          name: "bbb"
+        },
+        {
+          permissionId: 4,
+          parentId: 2,
+          name: "ccc"
+        }
+      ];
+
+      var tree = new treeUtil(data, 'permissionId', 'parentId');
+      console.log(tree.toTree())
+
+      // var result = data.reduce((res, item) => {
+      //   if (res[item.permissionId] == null) {
+      //     res[item.permissionId] = {};
+      //   }
+      //   if (res[item.permissionId][item.parentId] == null) {
+      //     res[item.permissionId][item.parentId] = [];
+      //   }
+      //   res[item.permissionId][item.parentId].push(item);
+      //   return res;
+      // }, {});
+
+    },
     handleSubmit() {
       this.$refs["postForm"].validate(valid => {
         if (valid) {

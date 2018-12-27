@@ -20,11 +20,12 @@ export default {
     };
   },
   watch: {
-    value: function(newVal,oldVal) {
+    value: function(newVal, oldVal) {
+      console.log("new: %s, old: %s", newVal, oldVal);
       this.selected = newVal;
     },
     selected: function(newVal, oldVal) {
-      //console.log("new: %s, old: %s", newVal, oldVal);
+      console.log("new: %s, old: %s", newVal, oldVal);
       this.$emit("input", newVal);
     }
   },
