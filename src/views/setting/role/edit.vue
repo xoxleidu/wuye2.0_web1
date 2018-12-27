@@ -52,66 +52,66 @@
  *parentKey，父字段
  *map,需要将原始属性名称转换为什么名称
  */
-function treeUtil(data, key, parentKey, map) {
-	this.data = data;
-	this.key = key;
-	this.parentKey = parentKey;
-	this.treeParentKey = parentKey; //parentKey要转换成什么属性名称
-	this.treeKey = key; //key要转换成什么属性名称
-	this.map = map;
-	if(map) {
-		if(map[key]) this.treeKey = map[key];
-	}
-	this.toTree = function() {
-		var data = this.data;
-		var pos = {};
-		var tree = [];
-		var i = 0;
-		while(data.length != 0) {
-			if(data[i][this.parentKey] == 0) {
-				var _temp = this.copy(data[i]);
-				tree.push(_temp);
-				pos[data[i][this.key]] = [tree.length - 1];
-				data.splice(i, 1);
-				i--;
-			} else {
-				var posArr = pos[data[i][this.parentKey]];
-				if(posArr != undefined) {
-					var obj = tree[posArr[0]];
-					for(var j = 1; j < posArr.length; j++) {
-						obj = obj.children[posArr[j]];
-					}
-					var _temp = this.copy(data[i]);
-					obj.children.push(_temp);
-					pos[data[i][this.key]] = posArr.concat([obj.children.length - 1]);
-					data.splice(i, 1);
-					i--;
-				}
-			}
-			i++;
-			if(i > data.length - 1) {
-				i = 0;
-			}
-		}
-		return tree;
-	}
-	this.copy = function(item) {
-		var _temp = {
-			children: []
-		};
-		_temp[this.treeKey] = item[this.key];
-		for(var _index in item) {
-			if(_index != this.key && _index != this.parentKey) {
-				var _property = item[_index];
-				if((!!this.map) && this.map[_index])
-					_temp[this.map[_index]] = _property;
-				else
-					_temp[_index] = _property;
-			}
-		}
-		return _temp;
-	}
-}
+// function treeUtil(data, key, parentKey, map) {
+// 	this.data = data;
+// 	this.key = key;
+// 	this.parentKey = parentKey;
+// 	this.treeParentKey = parentKey; //parentKey要转换成什么属性名称
+// 	this.treeKey = key; //key要转换成什么属性名称
+// 	this.map = map;
+// 	if(map) {
+// 		if(map[key]) this.treeKey = map[key];
+// 	}
+// 	this.toTree = function() {
+// 		var data = this.data;
+// 		var pos = {};
+// 		var tree = [];
+// 		var i = 0;
+// 		while(data.length != 0) {
+// 			if(data[i][this.parentKey] == 0) {
+// 				var _temp = this.copy(data[i]);
+// 				tree.push(_temp);
+// 				pos[data[i][this.key]] = [tree.length - 1];
+// 				data.splice(i, 1);
+// 				i--;
+// 			} else {
+// 				var posArr = pos[data[i][this.parentKey]];
+// 				if(posArr != undefined) {
+// 					var obj = tree[posArr[0]];
+// 					for(var j = 1; j < posArr.length; j++) {
+// 						obj = obj.children[posArr[j]];
+// 					}
+// 					var _temp = this.copy(data[i]);
+// 					obj.children.push(_temp);
+// 					pos[data[i][this.key]] = posArr.concat([obj.children.length - 1]);
+// 					data.splice(i, 1);
+// 					i--;
+// 				}
+// 			}
+// 			i++;
+// 			if(i > data.length - 1) {
+// 				i = 0;
+// 			}
+// 		}
+// 		return tree;
+// 	}
+// 	this.copy = function(item) {
+// 		var _temp = {
+// 			children: []
+// 		};
+// 		_temp[this.treeKey] = item[this.key];
+// 		for(var _index in item) {
+// 			if(_index != this.key && _index != this.parentKey) {
+// 				var _property = item[_index];
+// 				if((!!this.map) && this.map[_index])
+// 					_temp[this.map[_index]] = _property;
+// 				else
+// 					_temp[_index] = _property;
+// 			}
+// 		}
+// 		return _temp;
+// 	}
+// }
 import { updateUser, getRole } from "@/api/index.js";
 export default {
   data() {
@@ -136,43 +136,7 @@ export default {
 
   methods: {
     reconsData(data) {
-      var data = [
-        {
-          permissionId: 1,
-          parentId: 0,
-          name: "首页"
-        },
-        {
-          permissionId: 2,
-          parentId: 1,
-          name: "aaa"
-        },
-        {
-          permissionId: 3,
-          parentId: 1,
-          name: "bbb"
-        },
-        {
-          permissionId: 4,
-          parentId: 2,
-          name: "ccc"
-        }
-      ];
-
-      var tree = new treeUtil(data, 'permissionId', 'parentId');
-      console.log(tree.toTree())
-
-      // var result = data.reduce((res, item) => {
-      //   if (res[item.permissionId] == null) {
-      //     res[item.permissionId] = {};
-      //   }
-      //   if (res[item.permissionId][item.parentId] == null) {
-      //     res[item.permissionId][item.parentId] = [];
-      //   }
-      //   res[item.permissionId][item.parentId].push(item);
-      //   return res;
-      // }, {});
-
+      console.log(data);
     },
     handleSubmit() {
       this.$refs["postForm"].validate(valid => {
