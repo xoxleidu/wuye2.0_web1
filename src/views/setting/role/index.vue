@@ -11,9 +11,12 @@
       >
         <el-row :gutter="30">
           <el-col :span="6">
-            <el-form-item label="用户名">
-              <el-input v-model="tableQuery.username" placeholder="用户名"></el-input>
+            <el-form-item label="角色名">
+              <el-input v-model="tableQuery.roleName" placeholder="角色名"></el-input>
             </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <role-select></role-select>
           </el-col>
           <el-col :span="6">
             <el-form-item>
@@ -40,33 +43,12 @@
       style="width: 100%;"
       class="admin-table-list"
     >
-      <el-table-column prop="username" label="用户名"></el-table-column>
-      <el-table-column prop="roleName" label="所属角色"></el-table-column>
-      <el-table-column prop="officeName" label="所属办公室"></el-table-column>
-      <el-table-column label="激活">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.status"
-            @change="userActivation(scope.row)"
-            :active-value="0"
-            :inactive-value="1"
-            active-text="启用"
-            inactive-text="停用"
-            active-color="#13ce66"
-            inactive-color="#cbcbcb"
-          ></el-switch>
-        </template>
-      </el-table-column>
+      <el-table-column prop="roleName" label="角色名"></el-table-column>
+      <el-table-column prop="menuName" label="对应权限"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="openEdit(scope)" icon="el-icon-edit" type="success">编辑</el-button>
-          <el-button
-            size="mini"
-            @click="openRepassword(scope)"
-            icon="el-icon-edit"
-            type="warning"
-          >修改密码</el-button>
-          <el-button size="mini" @click="delRow(scope)" icon="el-icon-edit" type="danger">删除</el-button>
+          <el-button size="mini" @click="openEdit(scope)" icon="el-icon-edit">编辑</el-button>
+          <el-button size="mini" @click="openRepassword(scope)" icon="el-icon-edit" type="danger">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -109,12 +91,13 @@
 </template>
 
 <script>
-import { getUserList, activationUser, deleteUser } from "@/api/index.js";
+import { getUserList } from "@/api/index.js";
 import add from "./add.vue";
 import edit from "./edit.vue";
 import repassword from "./repassword.vue";
+import roleSelect from "@/components/select/role-select.vue";
 export default {
-  components: { add, edit, repassword },
+  components: { add, edit, repassword, roleSelect },
   created() {
     this.getTable();
   },
@@ -149,19 +132,6 @@ export default {
         name: "project",
         param: { vehicleId: scope.row.scopeId }
       });
-    },
-    //用户激活
-    userActivation(row) {
-      console.log(this);
-      activationUser(row)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          this.tableLoading = false;
-
-          console.warn(err);
-        });
     },
     //添加
     openAdd() {
@@ -214,19 +184,10 @@ export default {
         type: "warning"
       })
         .then(() => {
-          deleteUser(scope.row.userId)
-            .then(() => {
-              this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-            })
-            .catch(err => {
-              this.$message({
-                type: "info",
-                message: err.msg
-              });
-            });
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
         })
         .catch(() => {
           this.$message({

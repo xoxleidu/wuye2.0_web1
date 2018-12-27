@@ -13,7 +13,11 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="角色" prop="roleId">
-            <role-select class="base-select" v-model="postData.roleId"></role-select>
+            <el-select v-model="postData.roleId" class="base-select">
+              <el-option value="1" label="处长"></el-option>
+              <el-option value="2" label="科长"></el-option>
+              <el-option value="3" label="职员"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -53,9 +57,7 @@
 
 <script>
 import { updateUser, getUser } from "@/api/index.js";
-import roleSelect from "@/components/select/role-select.vue";
 export default {
-  components: { roleSelect },
   data() {
     return {
       loading: false,
@@ -87,7 +89,6 @@ export default {
       this.$refs["postForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          console.log(this.postData)
           updateUser(this.postData)
             .then(res => {
               this.$utils.callResponse(this, res);
