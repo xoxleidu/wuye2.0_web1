@@ -11,8 +11,8 @@
       >
         <el-row :gutter="30">
           <el-col :span="6">
-            <el-form-item label="用户名">
-              <el-input v-model="tableQuery.username" placeholder="用户名"></el-input>
+            <el-form-item label="角色名">
+              <el-input v-model="tableQuery.roleName" placeholder="角色名"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -43,12 +43,12 @@
       style="width: 100%;"
       class="admin-table-list"
     >
-      <el-table-column prop="username" label="用户名"></el-table-column>
-      <el-table-column prop="username" label="用户名1"></el-table-column>
+      <el-table-column prop="roleName" label="角色名"></el-table-column>
+      <el-table-column prop="menuName" label="对应权限"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="openEdit(scope)" icon="el-icon-edit">编辑</el-button>
-          <el-button size="mini" @click="openRepassword(scope)" icon="el-icon-edit">修改密码</el-button>
+          <el-button size="mini" @click="openRepassword(scope)" icon="el-icon-edit" type="danger">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

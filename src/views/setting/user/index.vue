@@ -59,8 +59,14 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="openEdit(scope)" icon="el-icon-edit">编辑</el-button>
-          <el-button size="mini" @click="openRepassword(scope)" icon="el-icon-edit">修改密码</el-button>
+          <el-button size="mini" @click="openEdit(scope)" icon="el-icon-edit" type="success">编辑</el-button>
+          <el-button
+            size="mini"
+            @click="openRepassword(scope)"
+            icon="el-icon-edit"
+            type="warning"
+          >修改密码</el-button>
+          <el-button size="mini" @click="delRow(scope)" icon="el-icon-edit" type="danger">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -103,7 +109,7 @@
 </template>
 
 <script>
-import { getUserList, activationUser } from "@/api/index.js";
+import { getUserList, activationUser, deleteUser } from "@/api/index.js";
 import add from "./add.vue";
 import edit from "./edit.vue";
 import repassword from "./repassword.vue";
@@ -146,15 +152,14 @@ export default {
     },
     //用户激活
     userActivation(row) {
-      console.log(this)
+      console.log(this);
       activationUser(row)
         .then(res => {
           console.log(res);
-          
         })
         .catch(err => {
           this.tableLoading = false;
-          
+
           console.warn(err);
         });
     },
@@ -209,10 +214,19 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
+          deleteUser(scope.row.userId)
+            .then(() => {
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+            })
+            .catch(err => {
+              this.$message({
+                type: "info",
+                message: err.msg
+              });
+            });
         })
         .catch(() => {
           this.$message({
