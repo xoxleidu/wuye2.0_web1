@@ -69,7 +69,7 @@ export default {
                   location.href = document.referrer;
                 } else {
                   this.$router.replace("/");
-                  location.reload();
+                  // location.reload();
                 }
               } else {
                 this.$message.error(res.data.msg);
