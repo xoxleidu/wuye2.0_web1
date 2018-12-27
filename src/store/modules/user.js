@@ -12,7 +12,7 @@ const user = {
   mutations: {
     loginIn(state, userInfo) {
       state.real_name = userInfo.real_name;
-      state.rights = userInfo.rights.split(",");
+      state.rights = userInfo.rights ? userInfo.rights.split(",") : "";
       state.user_id = userInfo.user_id;
       state.token = userInfo.token;
       state.pass_word = userInfo.pass_word;
