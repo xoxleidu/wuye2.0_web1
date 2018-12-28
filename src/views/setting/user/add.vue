@@ -18,11 +18,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="所属办公室" prop="officeId">
-            <el-select v-model="postData.officeId" class="base-select">
-              <el-option value="1" label="处长"></el-option>
-              <el-option value="2" label="科长"></el-option>
-              <el-option value="3" label="职员"></el-option>
-            </el-select>
+            <office-select class="base-select" v-model="postData.officeId"></office-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -64,8 +60,9 @@
 <script>
 import { addUser } from "@/api/index.js";
 import roleSelect from "@/components/select/role-select.vue";
+import officeSelect from "@/components/select/office-select.vue";
 export default {
-  components: { roleSelect },
+  components: { roleSelect, officeSelect},
   data() {
     var validatePass = (rule, value, callback) => {
       if (value === "") {
@@ -94,7 +91,7 @@ export default {
         checkPass: "",
         idcard: "",
         mobile: "",
-        offceId: "",
+        officeId: "",
         roleId: "",
         status: 1
       },

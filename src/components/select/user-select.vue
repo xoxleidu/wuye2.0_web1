@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-select v-model="selectOffice" placeholder="请选择物业办公室-可搜索" filterable>
+    <el-select class="base-select" v-model="selectUser" placeholder="请选择用户-可搜索" filterable>
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
   </div>
@@ -9,17 +9,17 @@
 
 
 <script>
-import { getOffice } from "@/api/estate";
+import { getUserList } from "@/api/user";
 export default {
-  name: "officeSelect",
+  name: "userSelect",
   data() {
     return {
-      selectOffice: this.value? this.value : "",
+      selectUser: "",
       options: {}
     };
   },
   props: {
-    value: {
+    val: {
       type: String
     }, //接受外部v-model传入的值
     fileType: {
@@ -28,33 +28,34 @@ export default {
   },
   watch: {
     //判断下拉框的值是否有改变
-    selectOffice(val, oldVal) {
+    selectUser(val, oldVal) {
       console.log("new: %s, old: %s", val, oldVal);
       if (val != oldVal) {
-        this.$emit("change", this.selectOffice);
+        this.$emit("userSelect", this.selectUser);
       }
     }
   },
-  created() {
+  mounted() {
     //初始话下拉框的值
-    //this.selectOffice = this.value;
-    console.log("传过来的值");
-    console.log(this.selectOffice);
-    //this.options = {};
+    this.options = {};
     //后台获取
-    getOffice().then(res => {
-      console.log(res);
-      this.options = this.dataTransform(res.data.data.records);
-      //this.user = res.data.records
-    });
+    getUserList()
+      .then(res => {
+        console.log(res);
+        this.options = this.dataTransform(res.data.data);
+        //this.user = res.data.records
+      })
+      .catch(err => {
+        console.warn(err);
+      });
   },
   methods: {
     dataTransform(data) {
       let _data = [];
       for (let i = 0; i < data.length; i++) {
         _data[i] = {};
-        _data[i].label = data[i].label;
-        _data[i].value = data[i].officeId;
+        _data[i].label = data[i].username;
+        _data[i].value = data[i].userId;
       }
       return _data;
     }

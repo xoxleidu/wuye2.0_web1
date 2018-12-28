@@ -11,8 +11,8 @@
       >
         <el-row :gutter="30">
           <el-col :span="6">
-            <el-form-item label="角色名">
-              <el-input v-model="tableQuery.roleName" placeholder="角色名"></el-input>
+            <el-form-item label="地址">
+              <el-input v-model="tableQuery.buildingName" placeholder="地址"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -40,11 +40,17 @@
       style="width: 100%;"
       class="admin-table-list"
     >
-      <el-table-column prop="roleName" label="角色名"></el-table-column>
+      <el-table-column prop="buildingName" label="地址"></el-table-column>
       
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="openEdit(scope)" icon="el-icon-edit" type="success">编辑</el-button>
+          <el-button
+            size="mini"
+            @click="openRepassword(scope)"
+            icon="el-icon-edit"
+            type="warning"
+          >修改密码</el-button>
           <el-button size="mini" @click="delRow(scope)" icon="el-icon-edit" type="danger">删除</el-button>
         </template>
       </el-table-column>
@@ -81,7 +87,7 @@
 </template>
 
 <script>
-import { getRoleList, deleteRole } from "@/api/index.js";
+import { getBuildingList, deleteBuilding } from "@/api/estate.js";
 import add from "./add.vue";
 import edit from "./edit.vue";
 export default {
@@ -100,7 +106,7 @@ export default {
       tableQuery: {
         page: 1,
         size: 10,
-        roleName: ""
+        buildingName: ""
       },
       tableData: {
         data: [],
@@ -121,6 +127,7 @@ export default {
         param: { vehicleId: scope.row.scopeId }
       });
     },
+    
     //添加
     openAdd() {
       this.addKey++;
@@ -130,14 +137,19 @@ export default {
     //编辑
     openEdit(scope) {
       this.addKey++;
-      this.editId = scope.row.roleId;
+      this.editId = scope.row.buildingId;
       this.editDialog = true;
     },
-    
+    //修改密码
+    openRepassword(scope) {
+      this.addKey++;
+      this.editId = scope.row.buildingId;
+      this.repasswordDialog = true;
+    },
     // 查询信息
     getTable() {
       this.tableLoading = true;
-      getRoleList(this.tableQuery)
+      getBuildingList(this.tableQuery)
         .then(res => {
           this.tableLoading = false;
           var result = [];
@@ -167,7 +179,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          deleteRole(scope.row.roleId)
+          deleteBuilding(scope.row.buildingId)
             .then(() => {
               this.$message({
                 type: "success",

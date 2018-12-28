@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-select v-model="selected" placeholder="请选择角色-可搜索" filterable>
+    <el-select class="base-select" v-model="selected" placeholder="请选择角色-可搜索" filterable>
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
   </div>
@@ -31,14 +31,19 @@ export default {
 
   created() {
     //初始话下拉框的值
+    
     this.selected = this.value;
     //this.options = {};
     //后台获取
-    getRoleList().then(res => {
-      console.log(res);
-      this.options = this.dataTransform(res.data.data);
-      //this.user = res.data.records
-    });
+    getRoleList()
+      .then(res => {
+        //console.log(res);
+        this.options = this.dataTransform(res.data.data);
+        //this.user = res.data.records
+      })
+      .catch(err => {
+        console.warn(err);
+      });
   },
   methods: {
     dataTransform(data) {

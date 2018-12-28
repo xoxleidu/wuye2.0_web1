@@ -20,6 +20,9 @@ new Vue({
   render: h => h(App)
 }).$mount("#app");
 
+
+
+
 var data = [
   {
     id: 1,

@@ -17,21 +17,31 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item prop="permission" v-for="p in postData" :key="p.id">
-            <el-card class="box-card">
+          <el-form-item>
+            <el-card class="box-card" v-for="p in postData.permission" :key="p.id">
               <div slot="header" class="clearfix">
-                <span>{{p.pname}}</span>
-                <el-radio border label="全选"></el-radio>
+                {{p.name}}
+                <el-checkbox
+                  :indeterminate="isIndeterminate"
+                  v-model="checkAll"
+                  @change="handleCheckAllChange"
+                >全选</el-checkbox>
               </div>
-              <el-form-item :label="p.name">
-                <el-radio-group v-for="v in p.permission" :key="v" size="medium">
-                  <el-radio border v-model="permission" v-if="v==0" :label="v">{{v}}查看</el-radio>
-                  <el-radio border v-model="permission" v-if="v==1" :label="v">{{v}}控制</el-radio>
-                  <el-radio border v-model="permission" v-if="v==2" :label="v">{{v}}删除</el-radio>
-                </el-radio-group>
-              </el-form-item>
+
+              <el-row :gutter="10">
+                <el-col :span="4"></el-col>
+                <el-col :span="20">
+                  <div style="margin: 15px 0;"></div>
+                  <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+                    <el-checkbox v-for="v in p.children" :label="v.name" :key="v.id">{{v.name}}</el-checkbox>
+                  </el-checkbox-group>
+                </el-col>
+              </el-row>
+
             </el-card>
           </el-form-item>
+
+          
         </el-col>
         <el-col>
           <el-form-item>
@@ -117,10 +127,16 @@ export default {
   data() {
     return {
       loading: false,
-      postData: {},
+      postData: {
+        roleName: "",
+        permission: []
+      },
       rules: {
-        username: [this.$rules.required, this.$rules.length({ min: 6 })]
-      }
+        roleName: [this.$rules.required, this.$rules.length({ min: 6 })]
+      },
+      checkAll: false,
+      checkedCities: [],
+      isIndeterminate: true
     };
   },
   props: ["id"],
@@ -135,8 +151,66 @@ export default {
   },
 
   methods: {
-    reconsData(data) {
-      console.log(data);
+    reconsData() {
+      //this.postData = data;
+
+      var data = [
+        {
+          id: 1,
+          parentId: 0,
+          name: "首页"
+        },
+        {
+          id: 2,
+          parentId: 1,
+          name: "a"
+        },
+        {
+          id: 3,
+          parentId: 1,
+          name: "b"
+        },
+        {
+          id: 4,
+          parentId: 3,
+          name: "c"
+        },
+        {
+          id: 5,
+          parentId: 4,
+          name: "d"
+        },
+        {
+          id: 6,
+          parentId: 3,
+          name: "e"
+        },
+        {
+          id: 7,
+          parentId: 0,
+          name: "首页1"
+        }
+      ];
+
+      var dictX = {};
+      var root = [];
+      var childrens = data.filter(item => {
+        item.children = [];
+        dictX[item.id] = item;
+        if (item.parentId == 0) {
+          root.push(item);
+          return false;
+        } else {
+          return true;
+        }
+      });
+      childrens.map(item => {
+        dictX[item.parentId].children.push(item);
+      });
+      console.log(root);
+      this.postData.roleName = "admin11";
+      Object.assign(this.postData.permission, root);
+      console.log(this.postData.permission);
     },
     handleSubmit() {
       this.$refs["postForm"].validate(valid => {
@@ -154,6 +228,16 @@ export default {
           return false;
         }
       });
+    },
+    handleCheckAllChange(val) {
+      this.checkedCities = val ? this.postData.permission : [];
+      this.isIndeterminate = false;
+    },
+    handleCheckedCitiesChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.cities.length;
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.cities.length;
     }
   }
 };

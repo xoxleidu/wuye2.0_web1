@@ -126,7 +126,7 @@ import {
   deleteCommunity,
   deleteManyCommunity
 } from "@/api/estate";
-import officeSelect from "@/components/select/officeSelect.vue";
+import officeSelect from "@/components/select/office-select.vue";
 export default {
   components: { officeSelect },
   created() {

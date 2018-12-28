@@ -12,13 +12,13 @@
     >
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="角色名" prop="roleName">
-            <el-input v-model="postData.roleName"></el-input>
+          <el-form-item label="小区名" prop="communityName">
+            <el-input v-model="postData.communityName"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item prop="permission" v-for="p in postData.permission" :key="p.id">
-            
+        <el-col :span="12">
+          <el-form-item label="所属办公室" prop="officeId">
+            <office-select class="base-select" v-model="postData.officeId"></office-select>
           </el-form-item>
         </el-col>
 
@@ -34,15 +34,19 @@
 </template>
 
 <script>
-import { addRole } from "@/api/index.js";
+import { addCommunity } from "@/api/estate.js";
+import officeSelect from "@/components/select/office-select.vue";
 export default {
+  components: { officeSelect },
   data() {
     return {
       loading: false,
-      postData: {},
+      postData: {
+        communityName: "",
+        officeId: ""
+      },
       rules: {
-        roleId: [this.$rules.required],
-        roleName: [this.$rules.required, this.$rules.length({ min: 6 })]
+        communityName: [this.$rules.required, this.$rules.length({ min: 6 })],
       }
     };
   },
@@ -51,7 +55,8 @@ export default {
       this.$refs["postForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          addRole(this.postData)
+
+          addCommunity(this.postData)
             .then(res => {
               this.$utils.callResponse(this, res);
             })

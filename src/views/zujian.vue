@@ -2,27 +2,17 @@
   <div>
     <user-select v-on:userSelect="user($event)"></user-select>
     <date-select v-on:dateSelect="date($event)"></date-select>
-    <product-select v-on:productSelect="product($event)"></product-select>
     <community-select v-on:communitySelect="community($event)"></community-select>
-    <pay-select v-on:paySelect="pay($event)"></pay-select>
-    <hl-select v-on:hlSelect="hl($event)"></hl-select>
-    <enable-select v-on:enableSelect="enable($event)"></enable-select>
     <office-select v-on:officeSelect="office($event)"></office-select>
-    <pricingModel-select v-on:pricingmodelSelect="pricingmodel($event)"></pricingModel-select>
     <dict-select class="base-select" v-model="testData" :dict="$dict.ROLE_MODE"></dict-select>
     <role-select class="base-select" v-model="testData"></role-select>
   </div>
 </template>
 <script>
-import userSelect from "@/components/select/userSelect.vue";
-import dateSelect from "@/components/select/dateSelect.vue";
-import communitySelect from "@/components/select/communitySelect.vue";
-import productSelect from "@/components/select/productSelect.vue";
-import paySelect from "@/components/select/paySelect.vue";
-import hlSelect from "@/components/select/hlSelect.vue";
-import officeSelect from "@/components/select/officeSelect.vue";
-import enableSelect from "@/components/select/enableSelect.vue";
-import pricingModelSelect from "@/components/select/pricingModelSelect.vue";
+import userSelect from "@/components/select/user-select.vue";
+import dateSelect from "@/components/select/date-select.vue";
+import communitySelect from "@/components/select/community-select.vue";
+import officeSelect from "@/components/select/office-select.vue";
 import dictSelect from "@/components/select/dict-select.vue";
 import roleSelect from "@/components/select/role-select.vue";
 export default {
@@ -31,12 +21,7 @@ export default {
     userSelect,
     dateSelect,
     communitySelect,
-    productSelect,
-    paySelect,
-    hlSelect,
     officeSelect,
-    enableSelect,
-    pricingModelSelect,
     dictSelect,
     roleSelect
   },

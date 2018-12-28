@@ -15,40 +15,29 @@ export const getEstateType = query => {
  * getOffice
  */
 export const addOffice = query => {
-  // query = qs.stringify(query);
-  var req = {
-    officeName: query.officeName
-  };
-  console.log(query);
-  return ajax.post("/community/add", req);
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/office/", query);
 };
 
-export const deleteOffice = query => {
-  // query = qs.stringify(query);
-  var req = {
-    officeId: query.officeId
-  };
-  return ajax.post("/community/delete", req);
+export const deleteOffice = officeId => {
+  return ajax.delete(`/office/${officeId}`);
 };
 
 export const updateOffice = query => {
-  // query = qs.stringify(query);
-  var req = {
-    officeName: query.officeName,
-    officeId: query.officeId
-  };
-  console.log(query);
-  return ajax.post("/community/update", req);
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.put(`/office/${query.officeId}/`, query);
+};
+
+export const getOfficeList = query => {
+  return ajax.get("/office/", query);
+};
+
+export const getOffice = officeId => {
+  return ajax.get(`/office/${officeId}`);
 };
 
 export const getOfficeTree = query => {
-  // query = qs.stringify(query);
   return ajax.get("/office/gettree", query);
-};
-
-export const getOffice = query => {
-  // query = qs.stringify(query);
-  return ajax.get("/office/getlist", query);
 };
 
 /**
@@ -61,47 +50,33 @@ export const getOffice = query => {
  * getCommunity
  */
 export const addCommunity = query => {
-  // query = qs.stringify(query);
-  var req = {
-    communityName: query.communityName,
-    officeId: query.id
-  };
-  console.log(query);
-  return ajax.post("/community/add", req);
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/community/", query);
 };
 
-export const deleteCommunity = query => {
-  // query = qs.stringify(query);
-  var req = {
-    communityId: query.id
-  };
-  return ajax.post("/community/delete", req);
+export const deleteCommunity = communityId => {
+  return ajax.delete(`/community/${communityId}`);
 };
 
 export const deleteManyCommunity = query => {
-  // query = qs.stringify(query);
   return ajax.post("/community/deletemany", query);
 };
 
 export const updateCommunity = query => {
-  // query = qs.stringify(query);
-  var req = {
-    communityId: query.communityId,
-    communityName: query.communityName,
-    officeId: query.id
-  };
-  console.log(query);
-  return ajax.post("/community/update", req);
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.put(`/community/${query.communityId}/`, query);
+};
+
+export const getCommunityList = query => {
+  return ajax.get("/community/", query);
+};
+
+export const getCommunity = communityId => {
+  return ajax.get(`/community/${communityId}`);
 };
 
 export const getCommunityTree = query => {
-  // query = qs.stringify(query);
   return ajax.get("/community/gettree", query);
-};
-
-export const getCommunity = query => {
-  // query = qs.stringify(query);
-  return ajax.get("/community/getlist", query);
 };
 
 /**
@@ -113,22 +88,25 @@ export const getCommunity = query => {
  getBuilding
  */
 
-export const addBuilding = data => {
-  return ajax.post("/building/add", data);
+export const addBuilding = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/building/", query);
+}
+
+export const deleteBuilding = communityId => {
+  return ajax.delete(`/building/${communityId}`);
 };
 
-export const deleteBuilding = data => {
-  return ajax.post("/building/delete", data);
+
+export const updateBuilding = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.put(`/building/${query.buildingId}/`, query);
 };
 
-export const deleteManyBuilding = data => {
-  return ajax.post("/building/deletemany", data);
+export const getBuildingList = query => {
+  return ajax.get("/building/", query);
 };
 
-export const updateBuilding = data => {
-  return ajax.post("/building/update", data);
-};
-
-export const getBuilding = query => {
-  return ajax.get("/building/getlist", query);
+export const getBuilding = buildingId => {
+  return ajax.get(`/building/${buildingId}`);
 };

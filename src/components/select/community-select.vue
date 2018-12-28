@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <el-cascader v-model="selectCommunity" placeholder="请选择小区-可搜索" :options="options" filterable></el-cascader>
+    <el-cascader class="base-select" v-model="selectCommunity" placeholder="请选择小区-可搜索" :options="options" filterable></el-cascader>
   </div>
 </template>
 
@@ -37,10 +37,14 @@ export default {
     //初始话下拉框的值
     this.options = [];
     //后台获取
-    getCommunityTree().then(res => {
-      console.log(res);
-      this.options = res.data.data.records;
-    });
+    getCommunityTree()
+      .then(res => {
+        console.log(res);
+        this.options = res.data.data;
+      })
+      .catch(err => {
+        console.warn(err);
+      });
   }
 };
 </script>

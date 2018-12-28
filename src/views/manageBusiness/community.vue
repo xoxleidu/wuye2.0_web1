@@ -18,7 +18,7 @@
           >
             <span class="slot-t-node" slot-scope="{ node, data }">
               <!-- 未编辑状态 -->
-              <span v-show="!node.isEdit">
+              <span v-show="!node.editable">
                 <span :class="[data.id >= maxexpandId ? 'slot-t-node--label' : '']">{{ node.label }}</span>
                 <span class="slot-t-icons">
                   <!-- 新增按钮 -->
@@ -48,7 +48,7 @@
                 </span>
               </span>
               <!-- 编辑输入框 -->
-              <span v-show="node.isEdit">
+              <span v-show="node.editable">
                 <el-input
                   class="slot-t-input"
                   size="mini"
@@ -77,8 +77,8 @@
 </template>
 <script>
 import { getOfficeTree } from "@/api/estate";
-import communitySelect from "@/components/select/communitySelect.vue";
-import officeSelect from "@/components/select/officeSelect.vue";
+import communitySelect from "@/components/select/community-select.vue";
+import officeSelect from "@/components/select/office-select.vue";
 export default {
   name: "slot-tree",
   components: { communitySelect, officeSelect },
@@ -98,7 +98,7 @@ export default {
   },
   created() {
     getOfficeTree().then(res => {
-      this.setTree = res.data.data.records;
+      this.setTree = res.data.data;
     });
   },
   methods: {
@@ -124,14 +124,14 @@ export default {
     NodeBlur(n, d) {
       //输入框失焦
       console.log(n, d);
-      if (n.isEdit) {
-        this.$set(n, "isEdit", false);
+      if (n.editable) {
+        this.$set(n, "editable", false);
         this.$set(n.data, "label", d.name);
       }
     },
     // nodeEdit(s, d, n) {
     //   //编辑
-    //   d.isEdit = true;
+    //   d.editable = true;
     //   this.$nextTick(() => {
     //     this.$refs["treeInput" + d.id].$refs.input.focus();
     //   });
@@ -140,9 +140,9 @@ export default {
     NodeEdit(n, d) {
       //编辑节点
       console.log(n, d);
-      if (!n.isEdit) {
+      if (!n.editable) {
         //检测isEdit是否存在or是否为false
-        this.$set(n, "isEdit", true);
+        this.$set(n, "editable", true);
       }
       this.$nextTick(() => {
         this.$refs["slotTreeInput" + d.id].$refs.input.focus();

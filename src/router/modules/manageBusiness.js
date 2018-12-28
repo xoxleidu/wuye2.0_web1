@@ -10,13 +10,13 @@ export default {
       path: "/manageBusiness/community",
       name: "community",
       meta: { name: "物产管理", single: true },
-      component: () => import("@/views/manageBusiness/community.vue"),
+      component: () => import("@/views/manageBusiness/community/index.vue"),
       children: [
         {
           path: "/manageBusiness/estate",
           name: "estate",
           meta: { name: "物产详情" },
-          component: () => import("@/views/manageBusiness/estate.vue")
+          component: () => import("@/views/manageBusiness/building/index.vue")
         }
       ]
     },

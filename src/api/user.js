@@ -48,6 +48,19 @@ export const activationUser = query => {
 /**
  * 角色
  */
+export const addRole = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/role/", query);
+};
+
+export const deleteRole = roleId => {
+  return ajax.delete(`/role/${roleId}`);
+};
+
+export const updateRole = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.put(`/role/${query.roleId}/`, query);
+};
 
 export const getRoleList = query => {
   return ajax.get("/role/", query);
@@ -57,16 +70,7 @@ export const getRole = roleId => {
   return ajax.get(`/role/${roleId}`);
 };
 
-export const addRole = query => {
+export const activationRole = query => {
   query = JSON.parse(JSON.stringify(query));
-  return ajax.post("/role/", query);
-};
-
-export const updateRole = query => {
-  query = JSON.parse(JSON.stringify(query));
-  return ajax.put(`/role/${query.roleId}/`, query);
-};
-
-export const deleteRole = roleId => {
-  return ajax.delete(`/role/${roleId}`);
+  return ajax.put(`/role/${query.roleId}/status`, query);
 };
