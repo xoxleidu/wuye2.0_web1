@@ -40,7 +40,7 @@
                 native-type="submit"
               >查询</el-button>
             </el-form-item>
-          </el-col> -->
+          </el-col>-->
         </el-row>
       </el-form>
     </el-card>
@@ -117,8 +117,7 @@ import {
   getOffice,
   addCommunity,
   updateCommunity,
-  deleteCommunity,
-  deleteManyCommunity
+  deleteCommunity
 } from "@/api/estate";
 export default {
   created() {
@@ -265,22 +264,27 @@ export default {
           }
         )
           .then(() => {
-            deleteManyCommunity(this.multipleSelection)
-              .then(() => {
-                this.multipleSelection = [];
-                this.getTable();
+            // deleteManyCommunity(this.multipleSelection)
+            //   .then(() => {
+            //     this.multipleSelection = [];
+            //     this.getTable();
 
-                this.$message({
-                  type: "success",
-                  message: "删除成功"
-                });
-              })
-              .catch(error => {
-                this.$message({
-                  type: "warning",
-                  message: error.data.msg
-                });
-              });
+            //     this.$message({
+            //       type: "success",
+            //       message: "删除成功"
+            //     });
+            //   })
+            //   .catch(error => {
+            //     this.$message({
+            //       type: "warning",
+            //       message: error.data.msg
+            //     });
+            //   });
+
+            this.$message({
+              type: "success",
+              message: "删除成功"
+            });
           })
           .catch(() => {
             this.$message({

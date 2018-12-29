@@ -7,6 +7,7 @@ import store from "@/store";
 //引入路由
 import setting from "./modules/setting";
 import manageBusiness from "./modules/manageBusiness";
+import queryInfo from "./modules/queryInfo";
 Vue.use(Router);
 import "nprogress/nprogress.css";
 
@@ -41,6 +42,7 @@ var routes = [
     meta: { hidden: true },
     component: () => import("@/views/login.vue")
   },
+  queryInfo,
   setting,
   manageBusiness,
   {

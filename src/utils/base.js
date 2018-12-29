@@ -1,5 +1,5 @@
 var BASE_URL = "http://192.168.88.6:5000/";
-
+//var API_URL = "http://192.168.88.254:8080/tenement/";//郭文龙
 var API_URL = "http://60.10.139.124:5500/mock/42/";
 
 var dict = {

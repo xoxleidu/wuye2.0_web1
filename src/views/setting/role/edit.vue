@@ -17,30 +17,6 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item>
-            <el-card class="box-card" v-for="p in postData.permission" :key="p.id">
-              <div slot="header" class="clearfix">
-                {{p.name}}
-                <el-checkbox
-                  :indeterminate="isIndeterminate"
-                  v-model="checkAll"
-                  @change="handleCheckAllChange"
-                >全选</el-checkbox>
-              </div>
-
-              <el-row :gutter="10">
-                <el-col :span="4"></el-col>
-                <el-col :span="20">
-                  <div style="margin: 15px 0;"></div>
-                  <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-                    <el-checkbox v-for="v in p.children" :label="v.name" :key="v.id">{{v.name}}</el-checkbox>
-                  </el-checkbox-group>
-                </el-col>
-              </el-row>
-
-            </el-card>
-          </el-form-item>
-
           
         </el-col>
         <el-col>

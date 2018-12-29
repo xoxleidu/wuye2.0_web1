@@ -16,24 +16,25 @@ export const getEstateType = query => {
  */
 export const addOffice = query => {
   query = JSON.parse(JSON.stringify(query));
-  return ajax.post("/office/", query);
+  return ajax.post("/office/add", query);
 };
 
-export const deleteOffice = officeId => {
-  return ajax.delete(`/office/${officeId}`);
+export const deleteOffice = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/office/delete", query);
 };
 
 export const updateOffice = query => {
   query = JSON.parse(JSON.stringify(query));
-  return ajax.put(`/office/${query.officeId}/`, query);
+  return ajax.post("/office/update", query);
 };
 
 export const getOfficeList = query => {
-  return ajax.get("/office/", query);
+  return ajax.get("/office/getList", query);
 };
 
 export const getOffice = officeId => {
-  return ajax.get(`/office/${officeId}`);
+  return ajax.get("/office/getById", officeId);
 };
 
 export const getOfficeTree = query => {
@@ -51,28 +52,25 @@ export const getOfficeTree = query => {
  */
 export const addCommunity = query => {
   query = JSON.parse(JSON.stringify(query));
-  return ajax.post("/community/", query);
+  return ajax.post("/community/add", query);
 };
 
-export const deleteCommunity = communityId => {
-  return ajax.delete(`/community/${communityId}`);
-};
-
-export const deleteManyCommunity = query => {
-  return ajax.post("/community/deletemany", query);
+export const deleteCommunity = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/community/delete", query);
 };
 
 export const updateCommunity = query => {
   query = JSON.parse(JSON.stringify(query));
-  return ajax.put(`/community/${query.communityId}/`, query);
+  return ajax.post("/community/update", query);
 };
 
 export const getCommunityList = query => {
-  return ajax.get("/community/", query);
+  return ajax.get("/community/getList", query);
 };
 
 export const getCommunity = communityId => {
-  return ajax.get(`/community/${communityId}`);
+  return ajax.get("/community/getById", communityId);
 };
 
 export const getCommunityTree = query => {
@@ -90,23 +88,23 @@ export const getCommunityTree = query => {
 
 export const addBuilding = query => {
   query = JSON.parse(JSON.stringify(query));
-  return ajax.post("/building/", query);
-}
-
-export const deleteBuilding = communityId => {
-  return ajax.delete(`/building/${communityId}`);
+  return ajax.post("/building/add", query);
 };
 
+export const deleteBuilding = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/building/delete", query);
+};
 
 export const updateBuilding = query => {
   query = JSON.parse(JSON.stringify(query));
-  return ajax.put(`/building/${query.buildingId}/`, query);
+  return ajax.post("/building/update", query);
 };
 
 export const getBuildingList = query => {
-  return ajax.get("/building/", query);
+  return ajax.get("/building/getList", query);
 };
 
 export const getBuilding = buildingId => {
-  return ajax.get(`/building/${buildingId}`);
+  return ajax.get("/building/getById", buildingId);
 };

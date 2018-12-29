@@ -32,7 +32,7 @@ export default {
   created() {
     //初始话下拉框的值
     
-    this.selected = this.value;
+    //this.selected = this.value;
     //this.options = {};
     //后台获取
     getRoleList()

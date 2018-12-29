@@ -1,362 +1,510 @@
 <template>
-  <div>
-    <!-- <el-card shadow="always" class="admin-table-search">
-      <el-form
-        :model="tableQuery"
-        label-width="80px"
-        :label-position="isCollapse?'top':'left'"
-        class="table-search"
-        size="small"
-        @submit.native.prevent
-      >
-        <el-row :gutter="30">
-          <el-col :span="6">
-            <el-form-item label="姓名">
-              <el-input v-model="tableQuery.user_name" placeholder="姓名"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="年龄">
-              <el-input v-model="tableQuery.age" placeholder="年龄"></el-input>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="6" v-show="isCollapse">
-            <el-form-item label="性别">
-              <el-select v-model="tableQuery.sex" placeholder="性别" style="width:100%;" clearable>
-                <el-option label="男" value="1"></el-option>
-                <el-option label="女" value="2"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="isCollapse?24:6" style="text-align: right;">
-            <el-form-item>
-              <el-button type="primary" @click="isCollapse=!isCollapse" v-if="isCollapse">收起</el-button>
-              <el-button type="primary" @click="isCollapse=!isCollapse" v-if="!isCollapse">展开</el-button>
-              <el-button
-                type="primary"
-                @click="searchTable"
-                :loading="tableLoading"
-                native-type="submit"
-              >查询</el-button>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-card>-->
-    <el-button type="primary" @click="handleCreate">添加小区</el-button>
-    <el-button type="danger" @click="deleteAll">删除选中</el-button>
-    <el-table
-      :data="tableData.records"
-      v-loading="tableLoading"
-      style="width: 100%;"
-      class="admin-table-list"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="communityName" label="小区名称"></el-table-column>
-      <el-table-column prop="officeName" label="所属办公室"></el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button size="small" @click="handleUpdata(scope)" type="primary">修改</el-button>
-          <el-button size="small" @click="delRow(scope)" type="danger">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div style="float:right;margin-top:10px;">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="tableQuery.page"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="tableQuery.size"
-        :total="tableData.total"
-        layout="total, sizes, prev, pager, next, jumper"
-        background
-      ></el-pagination>
-      
-      <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-        <el-form
-          ref="dataForm"
-          :model="temp"
-          label-position="left"
-          label-width="70px"
-          style="width: 800px; margin-left:20px;"
-        >
-          <el-row :gutter="20" class="form-row">
-            <el-col :span="3">
-              <div class="from-left-title">小区名称</div>
-            </el-col>
-            <el-col :span="16">
-              <div class="from-value">
-                <el-input v-model="temp.communityName"/>
-              </div>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20" class="form-row">
-            <el-col :span="3">
-              <div class="from-left-title">所属办公室</div>
-            </el-col>
-            <el-col :span="16">
-              <div>{{temp.officeName}}
-                <!-- v-on:officeSelect="office($event)" -->
-                
-                <office-select v-model="temp.officeName" @change="setOffice($event)"></office-select>
-              </div>
-            </el-col>
-          </el-row>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">Clean</el-button>
-          <el-button
-            type="primary"
-            @click="dialogStatus==='create'?createData():updateData()"
-          >{{ dialogbutton }}</el-button>
+  <div id="Demo" style="height:100%">
+    <el-form ref="form" label-width="100px">
+      <el-form-item label="首页">
+        <div>
+          <el-checkbox
+            :indeterminate="isIndeterminate"
+            v-model="permission1.checkAll"
+            @change="handleCheckAllChange"
+          >全选</el-checkbox>
         </div>
-      </el-dialog>
-    </div>
+        <el-checkbox-group
+          v-model="permission1.checkAll"
+          v-for="p in permission1"
+          :key="p.permissionId"
+          @change="handleCheckedCitiesChange"
+        >
+          <el-tag class="checkboxTitle">{{p.name}}</el-tag>
+          <el-checkbox v-for="v in p.children" :label="v.name" :key="v.permissionId" @change="handleCheckedCitiesChangeChange">{{v.name}}</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
-
 <script>
-import {
-  getCommunity,
-  addCommunity,
-  updateCommunity,
-  deleteCommunity,
-  deleteManyCommunity
-} from "@/api/estate";
-import officeSelect from "@/components/select/office-select.vue";
 export default {
-  components: { officeSelect },
-  created() {
-    this.getTable();
-  },
   data() {
     return {
-      restData: "",
-      isCollapse: false,
-      tableLoading: false,
-      tableQuery: {
-        page: 1,
-        size: 10
-      },
-      tableData: {
-        records: [],
-        total: 0
-      },
-      temp: {},
-      textMap: {
-        update: "修改",
-        create: "添加"
-      },
-      dialogStatus: "",
-      dialogbutton: "",
-      dialogFormVisible: false,
-      multipleSelection: []
+      checkedPermission: [],
+      isIndeterminate: true,
+      permission1: [
+        {
+          permissionId: 1,
+          parentId: 0,
+          name: "首页",
+          children: [
+            {
+              permissionId: 2,
+              parentId: 1,
+              name: "首页业务"
+            },
+            {
+              permissionId: 3,
+              parentId: 1,
+              name: "首页财务"
+            }
+          ]
+        }
+      ],
+      permission2: [
+        {
+          permissionId: 4,
+          parentId: 0,
+          name: "信息查询",
+          children: [
+            {
+              permissionId: 5,
+              parentId: 4,
+              name: "物产信息查询"
+            },
+            {
+              permissionId: 6,
+              parentId: 4,
+              name: "导出"
+            }
+          ]
+        }
+      ],
+      permission3: [
+        {
+          permissionId: 7,
+          parentId: 0,
+          name: "费用办理",
+          children: [
+            {
+              permissionId: 8,
+              parentId: 7,
+              name: "查看"
+            },
+            {
+              permissionId: 9,
+              parentId: 7,
+              name: "办理"
+            },
+            {
+              permissionId: 10,
+              parentId: 7,
+              name: "优惠"
+            }
+          ]
+        }
+      ],
+      permission4: [
+        {
+          permissionId: 11,
+          parentId: 0,
+          name: "缴费票据",
+          children: [
+            {
+              permissionId: 12,
+              parentId: 11,
+              name: "查看"
+            },
+            {
+              permissionId: 13,
+              parentId: 11,
+              name: "导出"
+            },
+            {
+              permissionId: 14,
+              parentId: 11,
+              name: "办理"
+            }
+          ]
+        },
+        {
+          permissionId: 15,
+          parentId: 0,
+          name: "退费票据",
+          children: [
+            {
+              permissionId: 12,
+              parentId: 16,
+              name: "查看"
+            },
+            {
+              permissionId: 13,
+              parentId: 17,
+              name: "导出"
+            },
+            {
+              permissionId: 14,
+              parentId: 18,
+              name: "办理"
+            }
+          ]
+        },
+        {
+          permissionId: 19,
+          parentId: 0,
+          name: "扣费记录",
+          children: [
+            {
+              permissionId: 20,
+              parentId: 19,
+              name: "查看"
+            },
+            {
+              permissionId: 21,
+              parentId: 19,
+              name: "导出"
+            },
+            {
+              permissionId: 22,
+              parentId: 19,
+              name: "作废"
+            }
+          ]
+        },
+        {
+          permissionId: 23,
+          parentId: 0,
+          name: "月耗电量统计报表",
+          children: [
+            {
+              permissionId: 24,
+              parentId: 23,
+              name: "查看"
+            },
+            {
+              permissionId: 25,
+              parentId: 23,
+              name: "导出"
+            }
+          ]
+        },
+        {
+          permissionId: 26,
+          parentId: 0,
+          name: "月报",
+          children: [
+            {
+              permissionId: 27,
+              parentId: 26,
+              name: "查看"
+            },
+            {
+              permissionId: 28,
+              parentId: 26,
+              name: "导出"
+            }
+          ]
+        },
+        {
+          permissionId: 27,
+          parentId: 0,
+          name: "财务报表",
+          children: [
+            {
+              permissionId: 28,
+              parentId: 27,
+              name: "查看"
+            },
+            {
+              permissionId: 29,
+              parentId: 27,
+              name: "导出"
+            },
+            {
+              permissionId: 30,
+              parentId: 27,
+              name: "生成凭证号"
+            }
+          ]
+        },
+        {
+          permissionId: 33,
+          parentId: 0,
+          name: "财务汇总",
+          children: [
+            {
+              permissionId: 34,
+              parentId: 33,
+              name: "查看"
+            },
+            {
+              permissionId: 35,
+              parentId: 33,
+              name: "导出"
+            }
+          ]
+        },
+        {
+          permissionId: 36,
+          parentId: 0,
+          name: "换票查询",
+          children: [
+            {
+              permissionId: 37,
+              parentId: 36,
+              name: "查看"
+            },
+            {
+              permissionId: 38,
+              parentId: 36,
+              name: "导出"
+            }
+          ]
+        }
+      ],
+      permission5: [
+        {
+          permissionId: 39,
+          parentId: 0,
+          name: "物产信息管理",
+          children: [
+            {
+              permissionId: 40,
+              parentId: 39,
+              name: "查看"
+            },
+            {
+              permissionId: 41,
+              parentId: 39,
+              name: "管理"
+            },
+            {
+              permissionId: 42,
+              parentId: 39,
+              name: "删除"
+            },
+            {
+              permissionId: 43,
+              parentId: 39,
+              name: "导入"
+            }
+          ]
+        },
+        {
+          permissionId: 44,
+          parentId: 0,
+          name: "收费项管理",
+          children: [
+            {
+              permissionId: 45,
+              parentId: 44,
+              name: "查看"
+            },
+            {
+              permissionId: 46,
+              parentId: 44,
+              name: "管理"
+            },
+            {
+              permissionId: 47,
+              parentId: 44,
+              name: "删除"
+            }
+          ]
+        },
+        {
+          permissionId: 48,
+          parentId: 0,
+          name: "规则管理",
+          children: [
+            {
+              permissionId: 49,
+              parentId: 48,
+              name: "查看"
+            },
+            {
+              permissionId: 50,
+              parentId: 48,
+              name: "管理"
+            },
+            {
+              permissionId: 51,
+              parentId: 48,
+              name: "删除"
+            }
+          ]
+        },
+        {
+          permissionId: 52,
+          parentId: 0,
+          name: "电表管理",
+          children: [
+            {
+              permissionId: 53,
+              parentId: 52,
+              name: "查看"
+            },
+            {
+              permissionId: 54,
+              parentId: 52,
+              name: "管理"
+            },
+            {
+              permissionId: 55,
+              parentId: 52,
+              name: "删除"
+            }
+          ]
+        },
+        {
+          permissionId: 56,
+          parentId: 0,
+          name: "支出管理",
+          children: [
+            {
+              permissionId: 57,
+              parentId: 56,
+              name: "查看"
+            },
+            {
+              permissionId: 58,
+              parentId: 56,
+              name: "管理"
+            },
+            {
+              permissionId: 59,
+              parentId: 56,
+              name: "删除"
+            }
+          ]
+        },
+        {
+          permissionId: 60,
+          parentId: 0,
+          name: "财务报表分组管理",
+          children: [
+            {
+              permissionId: 61,
+              parentId: 60,
+              name: "查看"
+            },
+            {
+              permissionId: 62,
+              parentId: 60,
+              name: "管理"
+            },
+            {
+              permissionId: 63,
+              parentId: 60,
+              name: "删除"
+            }
+          ]
+        }
+      ],
+      permission6: [
+        {
+          permissionId: 64,
+          parentId: 0,
+          name: "角色设置",
+          children: [
+            {
+              permissionId: 65,
+              parentId: 64,
+              name: "查看"
+            },
+            {
+              permissionId: 66,
+              parentId: 64,
+              name: "审核"
+            }
+          ]
+        },
+        {
+          permissionId: 67,
+          parentId: 0,
+          name: "用户设置",
+          children: [
+            {
+              permissionId: 68,
+              parentId: 67,
+              name: "查看"
+            }
+          ]
+        },
+        {
+          permissionId: 69,
+          parentId: 0,
+          name: "个人信息",
+          children: [
+            {
+              permissionId: 70,
+              parentId: 69,
+              name: "查看"
+            }
+          ]
+        },
+        {
+          permissionId: 71,
+          parentId: 0,
+          name: "数据字典",
+          children: [
+            {
+              permissionId: 72,
+              parentId: 71,
+              name: "查看"
+            },
+            {
+              permissionId: 73,
+              parentId: 71,
+              name: "修改"
+            }
+          ]
+        },
+        {
+          permissionId: 74,
+          parentId: 0,
+          name: "操作日志",
+          children: [
+            {
+              permissionId: 75,
+              parentId: 74,
+              name: "查看"
+            }
+          ]
+        }
+      ],
+      permission7: [
+        {
+          permissionId: 76,
+          parentId: 0,
+          name: "H/L",
+          children: [
+            {
+              permissionId: 77,
+              parentId: 76,
+              name: "显示"
+            }
+          ]
+        },
+        {
+          permissionId: 78,
+          parentId: 0,
+          name: "提醒",
+          children: [
+            {
+              permissionId: 79,
+              parentId: 78,
+              name: "查看"
+            }
+          ]
+        }
+      ],
+
+      checkEquip: []
     };
   },
   methods: {
-    // 查询信息
-    getTable() {
-      this.tableLoading = true;
-      getCommunity()
-        .then(res => {
-          this.tableLoading = false;
-          console.log(res.data.data.total);
-          console.log(res.data.data.records);
-          if (res.data.code == "0000") {
-            this.$set(this.tableData, "records", res.data.data.records);
-            this.tableData.total = res.data.data.total;
-          }
-          console.log(this.tableData);
-        })
-        .catch(err => {
-          this.tableLoading = false;
-          console.warn(err);
-        });
+    handleCheckAllChange(val) {
+      console.log(val);
+      this.isIndeterminate = false;
     },
-    //选择办公室
-    office(msg) {
-      console.log(msg);
-    },
-    setOffice(msg) {
-      console.log(msg);
-    },
-    //添加数据
-    handleCreate() {
-      this.temp = {};
-      this.dialogStatus = "create";
-      this.dialogbutton = "create";
-      this.dialogFormVisible = true;
-      this.$nextTick(() => {
-        this.$refs["dataForm"].clearValidate();
-      });
-    },
-    createData() {
-      addCommunity().then(res => {
-        console.log(res);
-      });
-      // addCommunity(this.temp).then(res => {
-      //   if (res.code == "0000") {
-      //     this.temp.id = res.data.data.records;
-      //     this.tableData.unshift(this.temp);
-      //     this.dialogFormVisible = false;
-      //     this.$notify({
-      //       title: "成功",
-      //       message: "创建成功",
-      //       type: "success",
-      //       duration: 2000
-      //     });
-      //   } else {
-      //     this.$notify({
-      //       title: "失败",
-      //       message: "创建失败",
-      //       type: "error",
-      //       duration: 4000
-      //     });
-      //   }
-      // });
-    },
-    //修改数据
-    handleUpdata(scope) {
-      console.log(scope);
-      //this.temp = Object.assign({}, scope.row);
-      this.temp = scope.row;
-      this.dialogStatus = "update";
-      this.dialogbutton = "update";
-      this.dialogFormVisible = true;
-      this.$nextTick(() => {
-        this.$refs["dataForm"].clearValidate();
-      });
-    },
-    updateData() {
-      updateCommunity().then(res => {
-        console.log(res);
-      });
-      // updateCommunity(this.temp).then(res => {
-      //   if (res.code == "0000") {
-      //     for (const v of this.tableData) {
-      //       if (v.id === this.temp.id) {
-      //         const index = this.tableData.indexOf(v);
-      //         this.tableData.splice(index, 1, this.temp);
-      //         break;
-      //       }
-      //     }
-      //     //this.tableData.splice(index, 1,this.temp)
-      //     this.dialogFormVisible = false;
-      //     this.$notify({
-      //       title: "成功",
-      //       message: "编辑成功",
-      //       type: "success",
-      //       duration: 2000
-      //     });
-      //   } else {
-      //     this.$notify({
-      //       title: "失败",
-      //       message: "创建失败",
-      //       type: "error",
-      //       duration: 4000
-      //     });
-      //   }
-      // });
-    },
-    //全选
-    handleSelectionChange(val) {
-      for (var i = 0; i < val.length; i++) {
-        this.multipleSelection.push(val[i].id);
-      }
-      console.log(this.multipleSelection);
-    },
-    //删除多个
-    deleteAll() {
-      if (this.multipleSelection) {
-        this.$confirm(
-          "此操作将删除" + this.multipleSelection.length + "条信息, 是否继续?",
-          "提示",
-          {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning",
-            center: true
-          }
-        )
-          .then(() => {
-            deleteManyCommunity(this.multipleSelection)
-              .then(() => {
-                this.multipleSelection = [];
-                this.getTable();
-
-                this.$message({
-                  type: "success",
-                  message: "删除成功"
-                });
-              })
-              .catch(error => {
-                this.$message({
-                  type: "warning",
-                  message: error.data.msg
-                });
-              });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "取消删除"
-            });
-          });
-      }
-    },
-    //删除单个
-    delRow(scope) {
-      console.log(scope);
-      this.$confirm("此操作将删除该数据, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          deleteCommunity(scope.row.id).then(res => {
-            console.log(res);
-          });
-
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
-    },
-    // 每页数量切换
-    handleSizeChange(val) {
-      this.tableQuery.page = 1;
-      this.tableQuery.size = val;
-      this.getTable();
-    },
-    // 页数切换
-    handleCurrentChange(val) {
-      this.tableQuery.page = val;
-      this.getTable();
+    handleCheckedCitiesChange(value) {
+      console.log(value);
     }
   }
 };
 </script>
-
 <style>
-.from-row {
-  height: 36px;
-}
-.from-left-title {
-  text-align: right;
-  line-height: 36px;
-}
-.from-value {
-}
-.from-right {
+.checkboxTitle {
+  border: none;
+  background: none;
+  padding-right: 20px;
 }
 </style>
+

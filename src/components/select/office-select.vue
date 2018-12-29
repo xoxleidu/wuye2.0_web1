@@ -1,38 +1,29 @@
 <template>
   <div>
-    <el-select class="base-select" v-model="selectOffice" placeholder="请选择物业办公室-可搜索" filterable>
+    <el-select class="base-select" v-model="selected" placeholder="请选择物业办公室-可搜索" filterable>
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
   </div>
 </template>
 
-
-
 <script>
 import { getOfficeList } from "@/api/estate";
 export default {
   name: "office-select",
+  props: ["value"],
   data() {
     return {
-      selectOffice: this.value ? this.value : "",
-      options: {}
+      selected: "",
+      options: []
     };
   },
-  props: {
-    value: {
-      type: String
-    }, //接受外部v-model传入的值
-    fileType: {
-      type: Object
-    } //定义请求回来的json数据格式
-  },
   watch: {
-    //判断下拉框的值是否有改变
-    selectOffice(val, oldVal) {
-      console.log("new: %s, old: %s", val, oldVal);
-      if (val != oldVal) {
-        this.$emit("change", this.selectOffice);
-      }
+    value: function(newVal) {
+      this.selected = newVal;
+    },
+    selected: function(newVal) {
+      //console.log("new: %s, old: %s", newVal, oldVal);
+      this.$emit("input", newVal);
     }
   },
   created() {

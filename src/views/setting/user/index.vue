@@ -12,7 +12,7 @@
         <el-row :gutter="30">
           <el-col :span="6">
             <el-form-item label="用户名">
-              <el-input v-model="tableQuery.username" placeholder="用户名"></el-input>
+              <el-input v-model="tableQuery.userName" placeholder="用户名"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -40,7 +40,7 @@
       style="width: 100%;"
       class="admin-table-list"
     >
-      <el-table-column prop="username" label="用户名"></el-table-column>
+      <el-table-column prop="userName" label="用户名"></el-table-column>
       <el-table-column prop="roleName" label="所属角色"></el-table-column>
       <el-table-column prop="officeName" label="所属办公室"></el-table-column>
       <el-table-column label="激活">

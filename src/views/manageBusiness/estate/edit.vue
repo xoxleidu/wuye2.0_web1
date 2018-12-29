@@ -12,34 +12,16 @@
     >
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="角色" prop="roleId">
-            <role-select class="base-select" v-model="postData.roleId"></role-select>
+          <el-form-item label="小区名" prop="communityName">
+            <el-input v-model="postData.communityName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="所属办公室" prop="officeId">
-            <el-select v-model="postData.officeId" class="base-select">
-              <el-option value="1" label="处长"></el-option>
-              <el-option value="2" label="科长"></el-option>
-              <el-option value="3" label="职员"></el-option>
-            </el-select>
+            <office-select class="base-select" v-model="postData.officeId"></office-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="用户名" prop="userName">
-            <el-input v-model="postData.userName"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="身份证号" prop="idcard">
-            <el-input v-model="postData.idcard"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="联系电话" prop="mobile">
-            <el-input v-model="postData.mobile"></el-input>
-          </el-form-item>
-        </el-col>
+
         <el-col>
           <el-form-item>
             <el-button type="primary" native-type="submit" :loading="loading">提交</el-button>
@@ -53,41 +35,41 @@
 
 <script>
 import { updateUser, getUser } from "@/api/index.js";
-import roleSelect from "@/components/select/role-select.vue";
+import officeSelect from "@/components/select/office-select.vue";
 export default {
-  components: { roleSelect },
+  components: { officeSelect },
   data() {
     return {
       loading: false,
       postData: {
-        userId: "",
-        userName: "",
-        idcard: "",
-        mobile: "",
-        officeId: "",
-        roleId: "",
-        status: 1
+        communityId: "",
+        communityName: "",
+        officeId: ""
       },
       rules: {
-        userName: [this.$rules.required, this.$rules.length({ min: 6 })]
+        username: [this.$rules.required, this.$rules.length({ min: 6 })]
       }
     };
   },
   props: ["id"],
   created() {
-    this.postData.userId = this.$props.id;
-    getUser(this.$props.id).then(res => {
-      if (res.data.code == 0) {
-        Object.assign(this.postData, res.data.data);
-      }
-    });
+    this.postData.communityId = this.$props.id;
+    getUser(this.$props.id)
+      .then(res => {
+        if (res.data.code == 0) {
+          Object.assign(this.postData, res.data.data);
+        }
+      })
+      .catch(err => {
+        console.warn(err);
+      });
   },
   methods: {
     handleSubmit() {
       this.$refs["postForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          console.log(this.postData)
+          console.log(this.postData);
           updateUser(this.postData)
             .then(res => {
               this.$utils.callResponse(this, res);

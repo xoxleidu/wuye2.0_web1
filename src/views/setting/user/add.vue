@@ -22,8 +22,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model="postData.username"></el-input>
+          <el-form-item label="用户名" prop="userName">
+            <el-input v-model="postData.userName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -86,7 +86,7 @@ export default {
     return {
       loading: false,
       postData: {
-        username: "",
+        userName: "",
         password: "",
         checkPass: "",
         idcard: "",
@@ -98,7 +98,7 @@ export default {
       rules: {
         roleId: [this.$rules.required],
         officeId: [this.$rules.required],
-        username: [this.$rules.required, this.$rules.length({ min: 6 })],
+        userName: [this.$rules.required, this.$rules.length({ min: 6 })],
         password: [
           this.$rules.required,
           { validator: validatePass, trigger: "blur" }

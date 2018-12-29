@@ -23,7 +23,7 @@
             >{{route.meta.name}}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
-        <div class="main-view" v-bind:style="{height: myHeight}">
+        <div class="main-view" >
           <router-view></router-view>
         </div>
       </el-main>
