@@ -16,14 +16,22 @@ export const getUser = userId => {
 export const addUser = query => {
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/users/add", query);
-};
+}; 
 
 export const updateUser = query => {
+  delete query.crateTime;
+  delete query.description;
+  delete query.lastLoginTime;
+  delete query.officeName;
+  delete query.roleName;
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/users/update", query);
 };
 
-export const deleteUser = query => {
+export const deleteUser = userId => {
+  var query = {
+    userId: userId
+  };
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/users/delete", query);
 };
@@ -33,6 +41,10 @@ export const updatePassword = query => {
 };
 
 export const activationUser = query => {
+  query = {
+    userId: query.userId,
+    status: query.status
+  };
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/users/status", query);
 };

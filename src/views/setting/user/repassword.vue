@@ -12,13 +12,13 @@
     >
       <el-row :gutter="20">
         <el-col :span="24">
-          <el-form-item label="原密码" prop="userPwdOld">
-            <el-input type="password" v-model="postData.userPwdOld" autocomplete="off"></el-input>
+          <el-form-item label="原密码" prop="oldPassword">
+            <el-input type="password" v-model="postData.oldPassword" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="新密码" prop="userPwd">
-            <el-input type="password" v-model="postData.userPwd" autocomplete="off"></el-input>
+          <el-form-item label="新密码" prop="newPassword">
+            <el-input type="password" v-model="postData.newPassword" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -54,7 +54,7 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.postData.userPwd) {
+      } else if (value !== this.postData.newPassword) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
@@ -64,13 +64,13 @@ export default {
       loading: false,
       postData: {
         userId: "",
-        userPwdOld: "",
-        userPwd: "",
+        oldPassword: "",
+        newPassword: "",
         checkPass: ""
       },
       rules: {
-        userPwdOld: [this.$rules.required],
-        userPwd: [
+        oldPassword: [this.$rules.required],
+        newPassword: [
           this.$rules.required,
           { validator: validatePass, trigger: "blur" }
         ],

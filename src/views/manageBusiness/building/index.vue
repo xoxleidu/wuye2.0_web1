@@ -93,6 +93,8 @@ import edit from "./edit.vue";
 export default {
   components: { add, edit },
   created() {
+    //this.tableQuery.communityId = this.$route.query.communityId
+    this.tableQuery.communityId = Number(this.$route.query.communityId)
     this.getTable();
   },
   data() {
@@ -106,7 +108,8 @@ export default {
       tableQuery: {
         page: 1,
         size: 10,
-        buildingName: ""
+        buildingName: "",
+        communityId:null
       },
       tableData: {
         data: [],

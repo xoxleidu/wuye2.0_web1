@@ -152,7 +152,6 @@ export default {
     },
     //用户激活
     userActivation(row) {
-      console.log(this);
       activationUser(row)
         .then(res => {
           console.log(res);
@@ -184,6 +183,7 @@ export default {
     // 查询信息
     getTable() {
       this.tableLoading = true;
+      console.log(this.tableQuery)
       getUserList(this.tableQuery)
         .then(res => {
           this.tableLoading = false;

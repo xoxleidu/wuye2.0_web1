@@ -27,13 +27,13 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="密码" prop="password">
-            <el-input type="password" v-model="postData.password" autocomplete="off"></el-input>
+          <el-form-item label="密码" prop="passWord">
+            <el-input type="passWord" v-model="postData.passWord" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="重复密码" prop="checkPass">
-            <el-input type="password" v-model="postData.checkPass" autocomplete="off"></el-input>
+            <el-input type="passWord" v-model="postData.checkPass" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -77,7 +77,7 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.postData.password) {
+      } else if (value !== this.postData.passWord) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
@@ -87,7 +87,7 @@ export default {
       loading: false,
       postData: {
         userName: "",
-        password: "",
+        passWord: "",
         checkPass: "",
         idcard: "",
         mobile: "",
@@ -99,7 +99,7 @@ export default {
         roleId: [this.$rules.required],
         officeId: [this.$rules.required],
         userName: [this.$rules.required, this.$rules.length({ min: 6 })],
-        password: [
+        passWord: [
           this.$rules.required,
           { validator: validatePass, trigger: "blur" }
         ],

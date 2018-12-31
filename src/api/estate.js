@@ -19,7 +19,10 @@ export const addOffice = query => {
   return ajax.post("/office/add", query);
 };
 
-export const deleteOffice = query => {
+export const deleteOffice = officeId => {
+  var query = {
+    officeId: officeId
+  };
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/office/delete", query);
 };
@@ -55,12 +58,16 @@ export const addCommunity = query => {
   return ajax.post("/community/add", query);
 };
 
-export const deleteCommunity = query => {
+export const deleteCommunity = communityId => {
+  var query = {
+    communityId: communityId
+  };
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/community/delete", query);
 };
 
 export const updateCommunity = query => {
+  delete query.officeName;
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/community/update", query);
 };
@@ -70,7 +77,7 @@ export const getCommunityList = query => {
 };
 
 export const getCommunity = communityId => {
-  return ajax.get("/community/getById", communityId);
+  return ajax.get("/community/getById?communityId=" + communityId);
 };
 
 export const getCommunityTree = query => {
@@ -87,6 +94,7 @@ export const getCommunityTree = query => {
  */
 
 export const addBuilding = query => {
+  console.log(query)
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/building/add", query);
 };
@@ -102,9 +110,19 @@ export const updateBuilding = query => {
 };
 
 export const getBuildingList = query => {
+  
   return ajax.get("/building/getList", query);
 };
 
 export const getBuilding = buildingId => {
   return ajax.get("/building/getById", buildingId);
+};
+
+/**
+ * 物产
+ * @param {} query 
+ */
+
+export const getEstateList = query => {
+  return ajax.get("/estate/getList", query);
 };

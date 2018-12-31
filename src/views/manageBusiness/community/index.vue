@@ -82,7 +82,7 @@
               <el-row :gutter="30">
                 <el-col :span="6">
                   <el-form-item label="小区名">
-                    <el-input v-model="tableQuery.officeName" placeholder="小区名"></el-input>
+                    <el-input v-model="tableQuery.communityName" placeholder="小区名"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -114,7 +114,7 @@
             <el-table-column prop="officeName" label="所属办公室"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <router-link :to="'/manageBusiness/estate?conmmunityId=' + scope.row.communityId">
+                <router-link :to="'/manageBusiness/estate?communityId=' + scope.row.communityId">
                   <el-button type="warning" size="mini" icon="el-icon-edit">设置</el-button>
                 </router-link>&nbsp;
                 <el-button
@@ -164,7 +164,10 @@
 import {
   getOfficeTree,
   getCommunityList,
-  deleteCommunity, //addOffice, updateOffice, deleteOffice
+  deleteCommunity,
+  addOffice,
+  updateOffice,
+  deleteOffice
 } from "@/api/estate.js";
 import add from "./add.vue";
 import edit from "./edit.vue";
@@ -187,7 +190,8 @@ export default {
       tableQuery: {
         page: 1,
         size: 10,
-        officeName: ""
+        communityName: "",
+        communityId: null
       },
       tableData: {
         data: [],
@@ -202,6 +206,11 @@ export default {
       defaultProps: {
         children: "children",
         label: "label"
+      },
+      postData: {
+        communityId: null,
+        officeId: null,
+        officeName: ""
       }
     };
   },
@@ -259,11 +268,12 @@ export default {
     },
     searchTable() {
       this.tableQuery.page = 1;
+      this.tableQuery.communityId = null;
+      //Object.assign(this.$data, this.$options.data())
       this.getTable();
     },
     //删除行
     delRow(scope) {
-      console.log(scope);
       this.$confirm("此操作将删除该数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -307,13 +317,9 @@ export default {
      * tree
      */
 
-    //小区搜索
-    community(msg) {
-      console.log(msg);
-    },
-
     handleNodeClick(data) {
-      console.log(data);
+      this.tableQuery.communityId = data.value;
+      this.getTable();
     },
 
     // handleAddTop() {
@@ -328,13 +334,27 @@ export default {
     //树形结构
     NodeBlur(n, d) {
       //输入框失焦
-      console.log(n, d);
       if (n.editable) {
-        this.$set(n, "editable", false);
-        this.$set(n.data, "label", d.name);
+        this.postData = {
+          officeId: d.id,
+          officeName: d.name,
+        };
+        updateOffice(this.postData)
+          .then(res => {
+            if (res.data.code == 0) {
+              this.$set(n, "editable", false);
+              this.$set(n.data, "label", d.name);
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch(err => {
+            console.warn(err);
+          });
       }
     },
     // nodeEdit(s, d, n) {
+    //   console.log("编辑1")
     //   //编辑
     //   d.editable = true;
     //   this.$nextTick(() => {
@@ -344,7 +364,6 @@ export default {
     // },
     NodeEdit(n, d) {
       //编辑节点
-      console.log(n, d);
       if (!n.editable) {
         //检测isEdit是否存在or是否为false
         this.$set(n, "editable", true);
@@ -355,7 +374,7 @@ export default {
     },
     NodeDel(n, d) {
       //删除节点ssss
-      console.log(n, d);
+      //console.log(n, d);
       //let that = this;
       if (d.children && d.children.length !== 0) {
         this.$message.error("此节点有子级，不可删除！");
@@ -364,12 +383,20 @@ export default {
         //新增节点可直接删除，已存在的节点要二次确认
         //删除操作
         let DelFun = () => {
-          let _list = n.parent.data.children || n.parent.data; //节点同级数据
-          let _index = _list.map(c => c.id).indexOf(d.id);
-          console.log(_index);
-          _list.splice(_index, 1);
-
-          this.$message.success("删除成功！");
+          deleteOffice(d.value)
+            .then(res => {
+              if (res.data.code == 0) {
+                let _list = n.parent.data.children || n.parent.data; //节点同级数据
+                let _index = _list.map(c => c.id).indexOf(d.id);
+                _list.splice(_index, 1);
+                this.$message.success("删除成功！");
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            })
+            .catch(err => {
+              console.warn(err);
+            });
         };
         //二次确认
         let ConfirmFun = () => {
@@ -389,23 +416,39 @@ export default {
     },
     NodeAdd(n, d) {
       //新增节点
-      console.log(n, d);
       //判断层级
       if (n.level >= 3) {
         this.$message.error("最多只支持三级！");
         return false;
       }
-      //新增数据
-      d.children.push({
-        id: ++this.maxexpandId,
-        label: "新增节点",
-        pid: d.id,
-        children: []
-      });
-      //同时展开节点
-      if (!n.expanded) {
-        n.expanded = true;
-      }
+      //新增数据 "新增办公室" + Math.ceil(Math.random()*1000)
+      this.postData = {
+        //officeId: ++this.maxexpandId,
+        officeName: "新增办公室",
+        parentId: d.id
+      };
+      addOffice(this.postData)
+        .then(res => {
+          //var labelName = "新增节点" + Math.ceil(Math.random()*1000);
+          if (res.data.code == 0) {
+            var result = res.data.data;
+            d.children.push({
+              id: result.officeId,
+              label: "新增办公室",
+              pid: d.id,
+              children: []
+            });
+            //同时展开节点
+            if (!n.expanded) {
+              n.expanded = true;
+            }
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+        .catch(err => {
+          console.warn(err);
+        });
     }
   }
 };
@@ -446,7 +489,7 @@ export default {
 }
 /*节点*/
 .slot-tree .slot-t-node--label {
-  font-weight: 600;
+  /* font-weight: 600; */
 }
 /*输入框*/
 .slot-tree .slot-t-input .el-input__inner {
@@ -462,8 +505,8 @@ export default {
   margin-left: 6px;
   width: 20px;
   height: 20px;
-  padding-top: 4px;
-  padding-left: 3px;
+  padding-top: 3px;
+  padding-left: 2px;
 }
 
 .slot-tree .el-tree-node__content:hover .slot-t-icons {

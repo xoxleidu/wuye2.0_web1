@@ -29,8 +29,8 @@ export default {
   created() {
     //初始话下拉框的值
     //this.selectOffice = this.value;
-    console.log("传过来的值");
-    console.log(this.selectOffice);
+    //console.log("传过来的值");
+    //console.log(this.selectOffice);
     //this.options = {};
     //后台获取
     getOfficeList()

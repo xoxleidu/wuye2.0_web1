@@ -12,8 +12,8 @@
 import userSelect from "@/components/select/user-select.vue";
 import dateSelect from "@/components/select/date-select.vue";
 import communitySelect from "@/components/select/community-select.vue";
-import officeSelect from "@/components/select/office-select.vue";
 import dictSelect from "@/components/select/dict-select.vue";
+import officeSelect from "@/components/select/office-select.vue";
 import roleSelect from "@/components/select/role-select.vue";
 export default {
   name: "group",

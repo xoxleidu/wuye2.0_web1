@@ -47,6 +47,7 @@ export default {
       },
       rules: {
         communityName: [this.$rules.required, this.$rules.length({ min: 6 })],
+        officeId: [this.$rules.required],
       }
     };
   },

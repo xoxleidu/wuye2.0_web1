@@ -48,14 +48,34 @@ var dict = {
     }
   ],
 
-  PRICING_MODE: [
+  ESTATETYPE_MODE: [
     {
-      label: "111",
-      value: 0
+      label: "房产",
+      value: 1
     },
     {
-      label: "2222",
-      value: 1
+      label: "商铺",
+      value: 2
+    },
+    {
+      label: "地下室",
+      value: 3
+    },
+    {
+      label: "地上车位",
+      value: 4
+    },
+    {
+      label: "地下车位",
+      value: 5
+    },
+    {
+      label: "车库",
+      value: 6
+    },
+    {
+      label: "其他物产",
+      value: 7
     }
   ],
   ROLE_MODE: [

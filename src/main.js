@@ -21,7 +21,7 @@ new Vue({
 }).$mount("#app");
 
 
-
+/** 
 
 var data = [
   {
@@ -77,3 +77,5 @@ childrens.map(item => {
   dictX[item.parentId].children.push(item);
 });
 console.log(root);
+
+*/

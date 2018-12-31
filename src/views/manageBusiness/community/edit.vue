@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { updateUser, getUser } from "@/api/index.js";
+import { updateCommunity, getCommunity } from "@/api/estate.js";
 import officeSelect from "@/components/select/office-select.vue";
 export default {
   components: { officeSelect },
@@ -47,14 +47,15 @@ export default {
         officeId: ""
       },
       rules: {
-        username: [this.$rules.required, this.$rules.length({ min: 6 })]
+        communityName: [this.$rules.required, this.$rules.length({ min: 6 })],
+        officeId: [this.$rules.required]
       }
     };
   },
   props: ["id"],
   created() {
     this.postData.communityId = this.$props.id;
-    getUser(this.$props.id)
+    getCommunity(this.$props.id)
       .then(res => {
         if (res.data.code == 0) {
           Object.assign(this.postData, res.data.data);
@@ -69,8 +70,7 @@ export default {
       this.$refs["postForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          console.log(this.postData);
-          updateUser(this.postData)
+          updateCommunity(this.postData)
             .then(res => {
               this.$utils.callResponse(this, res);
             })

@@ -8,8 +8,16 @@ export default {
     {
       path: "/queryinfo/estate",
       name: "estate",
-      meta: { name: "物产查询" },
-      component: () => import("@/views/manageBusiness/estate/index.vue")
+      meta: { name: "物产查询", single: true },
+      component: () => import("@/views/manageBusiness/estate/index.vue"),
+      children: [
+        {
+          path: "/queryinfo/estateInfo",
+          name: "estateInfo",
+          meta: { name: "物产详情" },
+          component: () => import("@/views/manageBusiness/estateInfo/index.vue")
+        }
+      ]
     },
     {
       path: "/queryinfo/feiyong",
