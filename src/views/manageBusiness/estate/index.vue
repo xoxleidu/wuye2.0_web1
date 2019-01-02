@@ -154,6 +154,7 @@ export default {
     // 查询信息
     getTable() {
       this.tableLoading = true;
+      console.log(this.tableQuery)
       getEstateList(this.tableQuery)
         .then(res => {
           this.tableLoading = false;

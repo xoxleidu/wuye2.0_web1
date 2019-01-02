@@ -33,15 +33,19 @@ export const updateOffice = query => {
 };
 
 export const getOfficeList = query => {
-  return ajax.get("/office/getList", query);
+  return ajax.get("/office/getList", {params:query});
 };
 
 export const getOffice = officeId => {
-  return ajax.get("/office/getById", officeId);
+  return ajax.get("/office/getById?officeId=" + officeId);
 };
 
-export const getOfficeTree = query => {
-  return ajax.get("/office/gettree", query);
+export const getOfficeAll = () => {
+  return ajax.get("/office/getAll");
+};
+
+export const getOfficeTree = () => {
+  return ajax.get("/office/gettree");
 };
 
 /**
@@ -73,15 +77,19 @@ export const updateCommunity = query => {
 };
 
 export const getCommunityList = query => {
-  return ajax.get("/community/getList", query);
+  return ajax.get("/community/getList", {params:query});
 };
 
 export const getCommunity = communityId => {
   return ajax.get("/community/getById?communityId=" + communityId);
 };
 
-export const getCommunityTree = query => {
-  return ajax.get("/community/gettree", query);
+export const getCommunityAll = () => {
+  return ajax.get("/community/getAll");
+};
+
+export const getCommunityTree = () => {
+  return ajax.get("/community/gettree");
 };
 
 /**
@@ -99,7 +107,10 @@ export const addBuilding = query => {
   return ajax.post("/building/add", query);
 };
 
-export const deleteBuilding = query => {
+export const deleteBuilding = buildingId => {
+  var query = {
+    buildingId: buildingId
+  };
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/building/delete", query);
 };
@@ -111,11 +122,11 @@ export const updateBuilding = query => {
 
 export const getBuildingList = query => {
   
-  return ajax.get("/building/getList", query);
+  return ajax.get("/building/getList", {params:query});
 };
 
 export const getBuilding = buildingId => {
-  return ajax.get("/building/getById", buildingId);
+  return ajax.get("/building/getById?buildingId=" + buildingId);
 };
 
 /**

@@ -24,7 +24,7 @@ export default {
       path: "/manageBusiness/chargingitems",
       name: "chargingitems",
       meta: { name: "收费项管理" },
-      component: () => import("@/views/manageBusiness/chargingitems.vue")
+      component: () => import("@/components/404.vue")
     }
   ]
 };

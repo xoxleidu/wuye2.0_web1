@@ -1,33 +1,32 @@
 <template>
-  <div id="Demo" style="height:100%">
-    <el-form ref="form" label-width="100px">
-      <el-form-item label="首页">
-        <div>
-          <el-checkbox
-            :indeterminate="isIndeterminate"
-            v-model="permission1.checkAll"
-            @change="handleCheckAllChange"
-          >全选</el-checkbox>
-        </div>
-        <el-checkbox-group
-          v-model="permission1.checkAll"
-          v-for="p in permission1"
-          :key="p.permissionId"
-          @change="handleCheckedCitiesChange"
-        >
-          <el-tag class="checkboxTitle">{{p.name}}</el-tag>
-          <el-checkbox v-for="v in p.children" :label="v.name" :key="v.permissionId" @change="handleCheckedCitiesChangeChange">{{v.name}}</el-checkbox>
+  <div>
+    <el-form>
+      <el-form-item label="权限设置">
+        <el-checkbox
+          :indeterminate="isIndeterminate"
+          v-model="checkAll"
+          @change="handleCheckAllChange"
+        >全选</el-checkbox>
+      </el-form-item>
+      <el-form-item >
+        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+          
+          <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
     </el-form>
   </div>
 </template>
 <script>
+const cityOptions = ['上海', '北京', '广州', '深圳'];
 export default {
   data() {
     return {
-      checkedPermission: [],
+      checkAllData: [],
+      checkAll: false,
+      checkedCities: ["上海", "北京"],
       isIndeterminate: true,
+      cities: cityOptions,
       permission1: [
         {
           permissionId: 1,
@@ -484,18 +483,20 @@ export default {
             }
           ]
         }
-      ],
-
-      checkEquip: []
+      ]
     };
   },
   methods: {
     handleCheckAllChange(val) {
       console.log(val);
+      this.checkedCities = val ? cityOptions : [];
       this.isIndeterminate = false;
     },
     handleCheckedCitiesChange(value) {
-      console.log(value);
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.cities.length;
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.cities.length;
     }
   }
 };
@@ -507,4 +508,3 @@ export default {
   padding-right: 20px;
 }
 </style>
-

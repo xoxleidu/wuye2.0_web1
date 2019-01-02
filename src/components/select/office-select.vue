@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { getOfficeList } from "@/api/estate";
+import { getOfficeAll } from "@/api/estate";
 export default {
   name: "office-select",
   props: ["value"],
@@ -33,7 +33,7 @@ export default {
     //console.log(this.selectOffice);
     //this.options = {};
     //后台获取
-    getOfficeList()
+    getOfficeAll()
       .then(res => {
         console.log(res);
         this.options = this.dataTransform(res.data.data);

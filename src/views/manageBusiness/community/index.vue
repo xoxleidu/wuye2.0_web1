@@ -282,6 +282,10 @@ export default {
         .then(() => {
           deleteCommunity(scope.row.communityId)
             .then(() => {
+              const _index = this.tableData.data.indexOf(scope.row);
+              this.tableData.data.splice(_index, 1);
+              // let _index = scope.row.map(c => c.id).indexOf(d.value);
+              // _list.splice(_index, 1);
               this.$message({
                 type: "success",
                 message: "删除成功!"
@@ -335,9 +339,10 @@ export default {
     NodeBlur(n, d) {
       //输入框失焦
       if (n.editable) {
+        console.log(d);
         this.postData = {
-          officeId: d.id,
-          officeName: d.name,
+          officeId: d.value,
+          officeName: d.name
         };
         updateOffice(this.postData)
           .then(res => {
@@ -387,7 +392,7 @@ export default {
             .then(res => {
               if (res.data.code == 0) {
                 let _list = n.parent.data.children || n.parent.data; //节点同级数据
-                let _index = _list.map(c => c.id).indexOf(d.id);
+                let _index = _list.map(c => c.id).indexOf(d.value);
                 _list.splice(_index, 1);
                 this.$message.success("删除成功！");
               } else {
@@ -417,23 +422,26 @@ export default {
     NodeAdd(n, d) {
       //新增节点
       //判断层级
-      if (n.level >= 3) {
+      if (n.level >= 4) {
         this.$message.error("最多只支持三级！");
         return false;
       }
+      console.log(d);
       //新增数据 "新增办公室" + Math.ceil(Math.random()*1000)
       this.postData = {
         //officeId: ++this.maxexpandId,
         officeName: "新增办公室",
-        parentId: d.id
+        parentId: d.value
       };
+
       addOffice(this.postData)
         .then(res => {
           //var labelName = "新增节点" + Math.ceil(Math.random()*1000);
           if (res.data.code == 0) {
             var result = res.data.data;
             d.children.push({
-              id: result.officeId,
+              id: ++this.maxexpandId,
+              value: result.officeId,
               label: "新增办公室",
               pid: d.id,
               children: []

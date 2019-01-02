@@ -6,7 +6,7 @@ export const login = query => {
 };
 
 export const getUserList = query => {
-  return ajax.get("/users/getList", query);
+  return ajax.get("/users/getList", {params:query});
 };
 
 export const getUser = userId => {
@@ -57,7 +57,10 @@ export const addRole = query => {
   return ajax.post("/role/", query);
 };
 
-export const deleteRole = query => {
+export const deleteRole = roleId => {
+  var query = {
+    roleId: roleId
+  };
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/role/delete", query);
 };
@@ -68,11 +71,15 @@ export const updateRole = query => {
 };
 
 export const getRoleList = query => {
-  return ajax.get("/role/getList", query);
+  return ajax.get("/role/getList", {params:query});
 };
 
 export const getRole = roleId => {
   return ajax.get("/role/getById", roleId);
+};
+
+export const getRoleAll = () => {
+  return ajax.get("/role/getAll");
 };
 
 export const activationRole = query => {

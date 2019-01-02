@@ -9,7 +9,7 @@
 
 
 <script>
-import { getRoleList } from "@/api/estate";
+import { getRoleAll } from "@/api/estate";
 export default {
   name: "role-Select",
   props: ["value"],
@@ -35,7 +35,7 @@ export default {
     //this.selected = this.value;
     //this.options = {};
     //后台获取
-    getRoleList()
+    getRoleAll()
       .then(res => {
         //console.log(res);
         this.options = this.dataTransform(res.data.data);
