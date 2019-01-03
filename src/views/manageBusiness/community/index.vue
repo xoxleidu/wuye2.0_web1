@@ -112,6 +112,20 @@
           >
             <el-table-column prop="communityName" label="小区名"></el-table-column>
             <el-table-column prop="officeName" label="所属办公室"></el-table-column>
+            <el-table-column label="自动收费">
+              <template slot-scope="scope">
+                <el-switch
+                  v-model="scope.row.status"
+                  @change="userActivation(scope.row)"
+                  :active-value="0"
+                  :inactive-value="1"
+                  active-text="启用"
+                  inactive-text="停用"
+                  active-color="#13ce66"
+                  inactive-color="#cbcbcb"
+                ></el-switch>
+              </template>
+            </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <router-link :to="'/manageBusiness/estate?communityId=' + scope.row.communityId">
@@ -165,6 +179,7 @@ import {
   getOfficeTree,
   getCommunityList,
   deleteCommunity,
+  autochargingCommunity,
   addOffice,
   updateOffice,
   deleteOffice
@@ -240,11 +255,17 @@ export default {
       this.editId = scope.row.communityId;
       this.editDialog = true;
     },
-    //修改密码
-    openRepassword(scope) {
-      this.addKey++;
-      this.editId = scope.row.communityId;
-      this.repasswordDialog = true;
+    //用户激活
+    userActivation(row) {
+      autochargingCommunity(row)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          this.tableLoading = false;
+
+          console.warn(err);
+        });
     },
     // 查询信息
     getTable() {

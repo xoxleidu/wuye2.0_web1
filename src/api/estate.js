@@ -92,6 +92,19 @@ export const getCommunityTree = () => {
   return ajax.get("/community/gettree");
 };
 
+export const autochargingCommunity = query => {
+  query = {
+    communityId: query.communityId,
+    autoCharge: query.autoCharge
+  };
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/community/autocharging", query);
+};
+
+export const getCommunityAutocharging = () => {
+  return ajax.get("/community/autocharging");
+};
+
 /**
  *楼号接口
  addBuilding 
