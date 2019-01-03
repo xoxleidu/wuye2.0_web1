@@ -6,6 +6,7 @@
     <office-select v-on:officeSelect="office($event)"></office-select>
     <dict-select class="base-select" v-model="testData" :dict="$dict.ROLE_MODE"></dict-select>
     <role-select class="base-select" v-model="testData"></role-select>
+    <img-upload v-model="testData"></img-upload>
   </div>
 </template>
 <script>
@@ -15,6 +16,7 @@ import communitySelect from "@/components/select/community-select.vue";
 import dictSelect from "@/components/select/dict-select.vue";
 import officeSelect from "@/components/select/office-select.vue";
 import roleSelect from "@/components/select/role-select.vue";
+import imgUpload from "@/components/select/img-upload.vue";
 export default {
   name: "group",
   components: {
@@ -23,7 +25,8 @@ export default {
     communitySelect,
     officeSelect,
     dictSelect,
-    roleSelect
+    roleSelect,
+    imgUpload
   },
   data(){
     return {

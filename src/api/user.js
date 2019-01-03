@@ -70,6 +70,7 @@ export const deleteRole = roleId => {
 };
 
 export const updateRole = query => {
+  console.log(query)
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/role/update", query);
 };
@@ -79,7 +80,7 @@ export const getRoleList = query => {
 };
 
 export const getRole = query => {
-  return ajax.get("/role/getById", query);
+  return ajax.get("/role/getById", { params: query });
 };
 
 export const getRoleAll = () => {

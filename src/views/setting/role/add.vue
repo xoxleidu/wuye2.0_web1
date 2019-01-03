@@ -34,15 +34,15 @@
                 <div
                   class="permission-group"
                   v-for="permissionGroup in permissionList.children"
-                  :key="permissionGroup.permission_id"
+                  :key="permissionGroup.permissionId"
                 >
-                  <strong class="permission-item-name">{{permissionGroup.menu_name}}</strong>
+                  <strong class="permission-item-name">{{permissionGroup.menuName}}</strong>
                   <div class="permission-item">
                     <el-checkbox
-                      :label="permission.permission_id"
+                      :label="permission.permissionId"
                       v-for="permission in permissionGroup.children"
-                      :key="permission.permission_id"
-                    >{{permission.menu_name}}</el-checkbox>
+                      :key="permission.permissionId"
+                    >{{permission.menuName}}</el-checkbox>
                   </div>
                 </div>
               </el-checkbox-group>
@@ -138,18 +138,18 @@ export default {
         var data = res.data.data;
         var parentsDict = {};
         var childrens = data.filter(item => {
-          if (item.parent_id == 0) {
+          if (item.parentId == 0) {
             item.children = [];
             item.childrenIds = []; //存放所有id，放到方便一级
-            parentsDict[item.permission_id] = item;
+            parentsDict[item.permissionId] = item;
             return false;
           } else {
             return true;
           }
         });
         childrens.map(item => {
-          parentsDict[item.parent_id].children.push(item);
-          parentsDict[item.parent_id].childrenIds.push(item.permission_id);
+          parentsDict[item.parentId].children.push(item);
+          parentsDict[item.parentId].childrenIds.push(item.permissionId);
         });
         this.permissionDict.map(item => {
           item.childrenIds.map(id => {

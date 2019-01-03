@@ -34,15 +34,15 @@
                 <div
                   class="permission-group"
                   v-for="permissionGroup in permissionList.children"
-                  :key="permissionGroup.permission_id"
+                  :key="permissionGroup.permissionId"
                 >
-                  <strong class="permission-item-name">{{permissionGroup.menu_name}}</strong>
+                  <strong class="permission-item-name">{{permissionGroup.menuName}}</strong>
                   <div class="permission-item">
                     <el-checkbox
-                      :label="permission.permission_id"
+                      :label="permission.permissionId"
                       v-for="permission in permissionGroup.children"
-                      :key="permission.permission_id"
-                    >{{permission.menu_name}}</el-checkbox>
+                      :key="permission.permissionId"
+                    >{{permission.menuName}}</el-checkbox>
                   </div>
                 </div>
               </el-checkbox-group>
@@ -67,7 +67,9 @@ export default {
   data() {
     return {
       loading: false,
-      postData: {},
+      postData: {
+        roleName:""
+      },
       permissionDict: [
         {
           name: "首页",
@@ -134,23 +136,24 @@ export default {
   },
   props: ["id"],
   created() {
+    this.postData.roleId = this.$props.id;
     getPermission().then(res => {
       if (res.data.code == 0) {
         var data = res.data.data;
         var parentsDict = {};
         var childrens = data.filter(item => {
-          if (item.parent_id == 0) {
+          if (item.parentId == 0) {
             item.children = [];
             item.childrenIds = []; //存放所有id，放到方便一级
-            parentsDict[item.permission_id] = item;
+            parentsDict[item.permissionId] = item;
             return false;
           } else {
             return true;
           }
         });
         childrens.map(item => {
-          parentsDict[item.parent_id].children.push(item);
-          parentsDict[item.parent_id].childrenIds.push(item.permission_id);
+          parentsDict[item.parentId].children.push(item);
+          parentsDict[item.parentId].childrenIds.push(item.permissionId);
         });
         this.permissionDict.map(item => {
           item.childrenIds.map(id => {
@@ -170,18 +173,20 @@ export default {
     getRole() {
       //获取角色信息 ["2", "3", "20", "40"]
       getRole({
-        roelId: this.$props.id
+        roleId: this.$props.id
       }).then(res => {
         if (res.data.code == 0) {
+          this.postData.roleName = res.data.data.roleName;
           var hasPermission = res.data.data.permissionIds;
-
           hasPermission.map(item => {
-            item = item.toString();
+            //item = item.toString();
+            //console.log(this.permissionDict)
             this.permissionDict.map(permissionList => {
               if (permissionList.allPermission.includes(item)) {
                 permissionList.checked.push(item);
               }
             });
+            
           });
         } else {
           this.$message.error(res.data.msg);

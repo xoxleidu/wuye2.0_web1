@@ -107,9 +107,8 @@ import { getEstateList } from "@/api/estate.js";
 export default {
   components: { communitySelect, dictSelect },
   created() {
-    // //this.tableQuery.communityId = this.$route.query.communityId
-    // this.tableQuery.communityId = Number(this.$route.query.communityId)
-    console.log(this.tableQuery);
+    //this.tableQuery.communityId = this.$route.query.communityId
+    this.tableQuery.communityId = Number(this.$route.query.communityId)
     this.getTable();
   },
   data() {

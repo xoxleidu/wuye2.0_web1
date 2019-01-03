@@ -150,3 +150,47 @@ export const getBuilding = buildingId => {
 export const getEstateList = query => {
   return ajax.get("/estate/getList", query);
 };
+
+/**
+ *电表接口
+ addBuilding 
+ deleteBuilding 
+ deleteManyBuilding 
+ updateBuilding 
+ getBuilding
+ */
+
+
+export const addAmmeter = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/ammeter/add", query);
+};
+
+export const deleteAmmeter = query => {
+  query = {
+    ammeterId: query.ammeterId,
+    estateId: query.estateId
+  };
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/ammeter/delete", query);
+};
+
+export const updateAmmeter = query => {
+  console.log(query)
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/ammeter/update", query);
+};
+
+export const getAmmeterList = query => {
+  return ajax.get("/ammeter/getList", { params: query });
+};
+
+export const getAmmeter = query => {
+  return ajax.get("/ammeter/getById", { params: query });
+};
+
+
+export const activationAmmeter = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/ammeter/enable", query);
+};
