@@ -17,8 +17,39 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          
+          <dl v-for="(permissionList,index) in permissionDict" :key="index" class="permission-list">
+            <dt>
+              {{permissionList.name}}
+              <el-checkbox
+                :indeterminate="permissionList.checked.length > 0 &&   permissionList.checked.length != permissionList.allPermission.length"
+                v-model="permissionList.checkAll"
+                @change="(isChecked)=>{handleCheckAllChange(isChecked,permissionList)}"
+              >全选</el-checkbox>
+            </dt>
+            <dd>
+              <el-checkbox-group
+                v-model="permissionList.checked"
+                @change="handleCheckedChange(permissionList)"
+              >
+                <div
+                  class="permission-group"
+                  v-for="permissionGroup in permissionList.children"
+                  :key="permissionGroup.permission_id"
+                >
+                  <strong class="permission-item-name">{{permissionGroup.menu_name}}</strong>
+                  <div class="permission-item">
+                    <el-checkbox
+                      :label="permission.permission_id"
+                      v-for="permission in permissionGroup.children"
+                      :key="permission.permission_id"
+                    >{{permission.menu_name}}</el-checkbox>
+                  </div>
+                </div>
+              </el-checkbox-group>
+            </dd>
+          </dl>
         </el-col>
+
         <el-col>
           <el-form-item>
             <el-button type="primary" native-type="submit" :loading="loading">提交</el-button>
@@ -31,168 +62,159 @@
 </template>
 
 <script>
-/*
- *函数定义
- *入口参数data,平行数组
- *key，id字段
- *parentKey，父字段
- *map,需要将原始属性名称转换为什么名称
- */
-// function treeUtil(data, key, parentKey, map) {
-// 	this.data = data;
-// 	this.key = key;
-// 	this.parentKey = parentKey;
-// 	this.treeParentKey = parentKey; //parentKey要转换成什么属性名称
-// 	this.treeKey = key; //key要转换成什么属性名称
-// 	this.map = map;
-// 	if(map) {
-// 		if(map[key]) this.treeKey = map[key];
-// 	}
-// 	this.toTree = function() {
-// 		var data = this.data;
-// 		var pos = {};
-// 		var tree = [];
-// 		var i = 0;
-// 		while(data.length != 0) {
-// 			if(data[i][this.parentKey] == 0) {
-// 				var _temp = this.copy(data[i]);
-// 				tree.push(_temp);
-// 				pos[data[i][this.key]] = [tree.length - 1];
-// 				data.splice(i, 1);
-// 				i--;
-// 			} else {
-// 				var posArr = pos[data[i][this.parentKey]];
-// 				if(posArr != undefined) {
-// 					var obj = tree[posArr[0]];
-// 					for(var j = 1; j < posArr.length; j++) {
-// 						obj = obj.children[posArr[j]];
-// 					}
-// 					var _temp = this.copy(data[i]);
-// 					obj.children.push(_temp);
-// 					pos[data[i][this.key]] = posArr.concat([obj.children.length - 1]);
-// 					data.splice(i, 1);
-// 					i--;
-// 				}
-// 			}
-// 			i++;
-// 			if(i > data.length - 1) {
-// 				i = 0;
-// 			}
-// 		}
-// 		return tree;
-// 	}
-// 	this.copy = function(item) {
-// 		var _temp = {
-// 			children: []
-// 		};
-// 		_temp[this.treeKey] = item[this.key];
-// 		for(var _index in item) {
-// 			if(_index != this.key && _index != this.parentKey) {
-// 				var _property = item[_index];
-// 				if((!!this.map) && this.map[_index])
-// 					_temp[this.map[_index]] = _property;
-// 				else
-// 					_temp[_index] = _property;
-// 			}
-// 		}
-// 		return _temp;
-// 	}
-// }
-import { updateUser, getRole } from "@/api/index.js";
+import { updateRole, getRole, getPermission } from "@/api/index.js";
 export default {
   data() {
     return {
       loading: false,
-      postData: {
-        roleName: "",
-        permission: []
-      },
+      postData: {},
+      permissionDict: [
+        {
+          name: "首页",
+          childrenIds: [1], //下级id集合
+          children: [], //下级
+          checked: [], //已选
+          allPermission: [], //所有可选权限，用于对比全选状态
+          checkAll: false //是否全选
+        },
+        {
+          name: "信息查询",
+          childrenIds: [4],
+          children: [],
+          checked: [],
+          allPermission: [],
+          checkAll: false
+        },
+        {
+          name: "费用办理",
+          childrenIds: [7],
+          children: [],
+          checked: [],
+          allPermission: [],
+          checkAll: false
+        },
+        {
+          name: "数据查询",
+          childrenIds: [11, 15, 19, 26, 29, 33, 36],
+          children: [],
+          checked: [],
+          allPermission: [],
+          checkAll: false
+        },
+        {
+          name: "业务管理",
+          childrenIds: [39, 44, 48, 52, 56, 60, 64],
+          children: [],
+          checked: [],
+          allPermission: [],
+          checkAll: false
+        },
+        {
+          name: "系统管理",
+          childrenIds: [67, 69, 71, 74],
+          children: [],
+          checked: [],
+          allPermission: [],
+          checkAll: false
+        },
+        {
+          name: "其他",
+          childrenIds: [76, 78],
+          children: [],
+          checked: [],
+          allPermission: [],
+          checkAll: false
+        }
+      ],
       rules: {
+        roleId: [this.$rules.required],
         roleName: [this.$rules.required, this.$rules.length({ min: 6 })]
-      },
-      checkAll: false,
-      checkedCities: [],
-      isIndeterminate: true
+      }
     };
   },
   props: ["id"],
   created() {
-    this.postData.roleId = this.$props.id;
-    getRole(this.$props.id).then(res => {
+    getPermission().then(res => {
       if (res.data.code == 0) {
-        this.reconsData(res.data.data);
-        //Object.assign(this.postData, res.data.data);
+        var data = res.data.data;
+        var parentsDict = {};
+        var childrens = data.filter(item => {
+          if (item.parent_id == 0) {
+            item.children = [];
+            item.childrenIds = []; //存放所有id，放到方便一级
+            parentsDict[item.permission_id] = item;
+            return false;
+          } else {
+            return true;
+          }
+        });
+        childrens.map(item => {
+          parentsDict[item.parent_id].children.push(item);
+          parentsDict[item.parent_id].childrenIds.push(item.permission_id);
+        });
+        this.permissionDict.map(item => {
+          item.childrenIds.map(id => {
+            item.children.push(parentsDict[id]);
+            item.allPermission = item.allPermission.concat(
+              parentsDict[id].childrenIds
+            );
+          });
+        });
+        this.getRole();
+      } else {
+        this.$message.error(res.data.msg);
       }
     });
   },
-
   methods: {
-    reconsData() {
-      //this.postData = data;
+    getRole() {
+      //获取角色信息 ["2", "3", "20", "40"]
+      getRole({
+        roelId: this.$props.id
+      }).then(res => {
+        if (res.data.code == 0) {
+          var hasPermission = res.data.data.permissionIds;
 
-      var data = [
-        {
-          id: 1,
-          parentId: 0,
-          name: "首页"
-        },
-        {
-          id: 2,
-          parentId: 1,
-          name: "a"
-        },
-        {
-          id: 3,
-          parentId: 1,
-          name: "b"
-        },
-        {
-          id: 4,
-          parentId: 3,
-          name: "c"
-        },
-        {
-          id: 5,
-          parentId: 4,
-          name: "d"
-        },
-        {
-          id: 6,
-          parentId: 3,
-          name: "e"
-        },
-        {
-          id: 7,
-          parentId: 0,
-          name: "首页1"
-        }
-      ];
-
-      var dictX = {};
-      var root = [];
-      var childrens = data.filter(item => {
-        item.children = [];
-        dictX[item.id] = item;
-        if (item.parentId == 0) {
-          root.push(item);
-          return false;
+          hasPermission.map(item => {
+            item = item.toString();
+            this.permissionDict.map(permissionList => {
+              if (permissionList.allPermission.includes(item)) {
+                permissionList.checked.push(item);
+              }
+            });
+          });
         } else {
-          return true;
+          this.$message.error(res.data.msg);
         }
       });
-      childrens.map(item => {
-        dictX[item.parentId].children.push(item);
-      });
-      console.log(root);
-      this.postData.roleName = "admin11";
-      Object.assign(this.postData.permission, root);
-      console.log(this.postData.permission);
+    },
+    handleCheckAllChange(isChecked, permissionList) {
+      if (isChecked) {
+        this.$set(permissionList, "checked", permissionList.allPermission);
+      } else {
+        this.$set(permissionList, "checked", []);
+      }
+    },
+    handleCheckedChange(permissionList) {
+      if (
+        permissionList.checked.length == permissionList.allPermission.length
+      ) {
+        permissionList.checkAll = true;
+      } else {
+        permissionList.checkAll = false;
+      }
     },
     handleSubmit() {
       this.$refs["postForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          updateUser(this.postData)
+          this.postData.permissionIds = [];
+          this.permissionDict.map(item => {
+            this.postData.permissionIds = this.postData.permissionIds.concat(
+              item.checked
+            );
+          });
+          updateRole(this.postData)
             .then(res => {
               this.$utils.callResponse(this, res);
             })
@@ -204,20 +226,52 @@ export default {
           return false;
         }
       });
-    },
-    handleCheckAllChange(val) {
-      this.checkedCities = val ? this.postData.permission : [];
-      this.isIndeterminate = false;
-    },
-    handleCheckedCitiesChange(value) {
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === this.cities.length;
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.cities.length;
     }
   }
 };
 </script>
 
-<style>
+<style lang="scss">
+.permission-list {
+  dl,
+  dd,
+  dt {
+    margin: 0;
+    padding: 0;
+  }
+  dt {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  .permission-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    width: 100%;
+    line-height: 35px;
+    margin-bottom: -1px;
+    background: #fff;
+  }
+  .permission-item-name {
+    display: block;
+    font-weight: normal;
+    text-align: center;
+
+    width: 150px;
+    flex-shrink: 0;
+  }
+  .permission-item {
+    border-left: 1px solid #ddd;
+
+    label {
+      width: 160px;
+      margin-left: 0 !important;
+      padding-left: 20px;
+    }
+  }
+  .el-checkbox-group {
+    font-size: inherit;
+    display: block;
+  }
+}
 </style>

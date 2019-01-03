@@ -6,7 +6,7 @@ export const login = query => {
 };
 
 export const getUserList = query => {
-  return ajax.get("/users/getList", {params:query});
+  return ajax.get("/users/getList", { params: query });
 };
 
 export const getUser = userId => {
@@ -16,7 +16,7 @@ export const getUser = userId => {
 export const addUser = query => {
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/users/add", query);
-}; 
+};
 
 export const updateUser = query => {
   delete query.crateTime;
@@ -52,9 +52,13 @@ export const activationUser = query => {
 /**
  * 角色
  */
+export const getPermission = query => {
+  //获取所有权限
+  return ajax.get("/permission/getList", { params: query });
+};
 export const addRole = query => {
   query = JSON.parse(JSON.stringify(query));
-  return ajax.post("/role/", query);
+  return ajax.post("/role/add", query);
 };
 
 export const deleteRole = roleId => {
@@ -71,11 +75,11 @@ export const updateRole = query => {
 };
 
 export const getRoleList = query => {
-  return ajax.get("/role/getList", {params:query});
+  return ajax.get("/role/getList", { params: query });
 };
 
-export const getRole = roleId => {
-  return ajax.get("/role/getById", roleId);
+export const getRole = query => {
+  return ajax.get("/role/getById", query);
 };
 
 export const getRoleAll = () => {
