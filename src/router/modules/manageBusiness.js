@@ -21,10 +21,18 @@ export default {
       ]
     },
     {
-      path: "/manageBusiness/chargingitems",
-      name: "chargingitems",
-      meta: { name: "电表管理" },
-      component: () => import("@/views/manageBusiness/ammeter/index.vue")
+      path: "/manageBusiness/ammeter",
+      name: "ammeter",
+      meta: { name: "电表管理", single: true },
+      component: () => import("@/views/manageBusiness/ammeter/index.vue"),
+      children: [
+        {
+          path: "/manageBusiness/ammeterinfo",
+          name: "ammeterinfo",
+          meta: { name: "电表详情" },
+          component: () => import("@/views/manageBusiness/ammeter/readrecord.vue")
+        }
+      ]
     }
   ]
 };

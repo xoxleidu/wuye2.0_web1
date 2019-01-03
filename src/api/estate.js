@@ -191,6 +191,11 @@ export const getAmmeter = query => {
 
 
 export const activationAmmeter = query => {
+  query = {
+    ammeterId:query.ammeterId,
+    enable:query.enable
+  }
+  console.log(query)
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/ammeter/enable", query);
 };
