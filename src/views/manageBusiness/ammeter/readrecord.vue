@@ -11,7 +11,7 @@
       >
         <el-row :gutter="30">
           <el-col :span="24">
-            <el-form-item label="电表管理"></el-form-item>
+            <el-form-item label="电表管理"> </el-form-item>
           </el-col>
           <el-col :span="6">
             电表名称：{{tableQuery.ammeterName}}
