@@ -11,19 +11,9 @@
       @submit.native.prevent="handleSubmit"
     >
       <el-row :gutter="20">
-        <el-col :span="24">
-          <el-form-item label="原密码" prop="oldPassword">
-            <el-input type="password" v-model="postData.oldPassword" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="新密码" prop="newPassword">
-            <el-input type="password" v-model="postData.newPassword" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="重复新密码" prop="checkPass">
-            <el-input type="password" v-model="postData.checkPass" autocomplete="off"></el-input>
+        <el-col :span="12">
+          <el-form-item label="结束表底" prop="maxNumber">
+            <el-input v-model="postData.maxNumber"></el-input>
           </el-form-item>
         </el-col>
         <el-col>
@@ -38,60 +28,35 @@
 </template>
 
 <script>
-import { updatePassword } from "@/api/index.js";
+import {
+  updateAmmeterRecordMaxNumber,
+  getAmmeterRecord
+} from "@/api/manage.js";
 export default {
   data() {
-    var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.postData.checkPass !== "") {
-          this.$refs.postForm.validateField("checkPass");
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.postData.newPassword) {
-        callback(new Error("两次输入密码不一致!"));
-      } else {
-        callback();
-      }
-    };
     return {
       loading: false,
-      postData: {
-        userId: "",
-        oldPassword: "",
-        newPassword: "",
-        checkPass: ""
-      },
+      postData: { maxNumber: "" },
       rules: {
-        oldPassword: [this.$rules.required],
-        newPassword: [
-          this.$rules.required,
-          { validator: validatePass, trigger: "blur" }
-        ],
-        checkPass: [
-          this.$rules.required,
-          { validator: validatePass2, trigger: "blur" }
-        ]
+        maxNumber: [this.$rules.required]
       }
     };
   },
   props: ["id"],
   created() {
-    this.postData.userId = this.$props.id;
-    console.log(this.postData.userId);
+    this.postData.ammeterRecordId = this.$props.id;
+    getAmmeterRecord(this.$props.id).then(res => {
+      if (res.data.code == 0) {
+        Object.assign(this.postData, res.data.data);
+      }
+    });
   },
   methods: {
     handleSubmit() {
       this.$refs["postForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          updatePassword(this.postData)
+          updateAmmeterRecordMaxNumber(this.postData)
             .then(res => {
               this.$utils.callResponse(this, res);
             })

@@ -19,7 +19,7 @@ export default {
   watch: {
     dateSelect(value) {
       if (value) {
-        this.$emit("dateSelect", Date.parse(value) / 1000);
+        this.$emit("input", Date.parse(value) / 1000);
       } else {
         Message({
           message: "请选择时间",

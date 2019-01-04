@@ -10,9 +10,24 @@
         @submit.native.prevent
       >
         <el-row :gutter="30">
-          <el-col :span="6">
-            <el-form-item label="地址">
-              <el-input v-model="tableQuery.buildingName" placeholder="地址"></el-input>
+          <el-col :span="8">
+            <el-form-item label="小区">
+              <community-select v-model="tableQuery.communityId"></community-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="支出类型">
+              <paytype-select v-model="tableQuery.payTypeId"></paytype-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="支出方式">
+              <dict-select v-model="tableQuery.payment" :dict="$dict.PAY_MODE"></dict-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="选择时间">
+              <datetodate-select v-on:dateSelect="datetodate($event)"></datetodate-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -40,17 +55,17 @@
       style="width: 100%;"
       class="admin-table-list"
     >
-      <el-table-column prop="buildingName" label="地址"></el-table-column>
+      <el-table-column prop="communityName" label="小区名称"></el-table-column>
+      <el-table-column prop="payName" label="支出用途"></el-table-column>
+      <el-table-column prop="payTypeId" label="支出类型"></el-table-column>
+      <el-table-column prop="payment" label="支出方式"></el-table-column>
+      <el-table-column prop="money" label="金额"></el-table-column>
+      <el-table-column prop="payTime" label="支出时间"></el-table-column>
+      <el-table-column prop="operator" label="操作人"></el-table-column>
       
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="openEdit(scope)" icon="el-icon-edit" type="success">编辑</el-button>
-          <el-button
-            size="mini"
-            @click="openRepassword(scope)"
-            icon="el-icon-edit"
-            type="warning"
-          >修改密码</el-button>
+          
           <el-button size="mini" @click="delRow(scope)" icon="el-icon-edit" type="danger">删除</el-button>
         </template>
       </el-table-column>
@@ -74,28 +89,21 @@
         @end="()=>{this.addDialog=false}"
       ></add>
     </el-dialog>
-    <el-dialog title="编辑" :visible.sync="editDialog" width="40%" center>
-      <edit
-        :key="addKey"
-        :id="editId"
-        @success="()=>{this.getTable();this.editDialog=false;this.editId='';}"
-        @end="()=>{this.editDialog=false;this.editId='';}"
-      ></edit>
-    </el-dialog>
-    
+   
   </div>
 </template>
 
 <script>
-import { getBuildingList, deleteBuilding } from "@/api/manage.js";
+import { getPayList, deletePay } from "@/api/financial.js";
 import add from "./add.vue";
-import edit from "./edit.vue";
+import dictSelect from "@/components/select/dict-select.vue";
+import paytypeSelect from "@/components/select/paytype-select.vue";
+import communitySelect from "@/components/select/community-select.vue";
+import datetodateSelect from "@/components/select/datetodate-select.vue";
 export default {
-  components: { add, edit },
+  components: { add, paytypeSelect, dictSelect, communitySelect, datetodateSelect },
   created() {
-    //this.tableQuery.communityId = this.$route.query.communityId
-    this.tableQuery.communityId = Number(this.$route.query.communityId)
-    this.getTable();
+    
   },
   data() {
     return {
@@ -107,9 +115,7 @@ export default {
       tableLoading: false,
       tableQuery: {
         page: 1,
-        size: 10,
-        buildingName: "",
-        communityId:null
+        size: 10
       },
       tableData: {
         data: [],
@@ -118,41 +124,20 @@ export default {
     };
   },
   methods: {
-    goVehicle(scope) {
-      this.$router.push({
-        name: "vehicle",
-        param: { vehicleId: scope.row.scopeId }
-      });
+    //选择时间
+    datetodate (date) {
+      this.tableQuery.startTime = date.startTime;
+      this.tableQuery.endTime = date.endTime;
     },
-    goProject(scope) {
-      this.$router.push({
-        name: "project",
-        param: { vehicleId: scope.row.scopeId }
-      });
-    },
-    
     //添加
     openAdd() {
       this.addKey++;
       this.addDialog = true;
     },
-
-    //编辑
-    openEdit(scope) {
-      this.addKey++;
-      this.editId = scope.row.buildingId;
-      this.editDialog = true;
-    },
-    //修改密码
-    openRepassword(scope) {
-      this.addKey++;
-      this.editId = scope.row.buildingId;
-      this.repasswordDialog = true;
-    },
     // 查询信息
     getTable() {
       this.tableLoading = true;
-      getBuildingList(this.tableQuery)
+      getPayList(this.tableQuery)
         .then(res => {
           this.tableLoading = false;
           var result = [];
@@ -171,7 +156,11 @@ export default {
     },
     searchTable() {
       this.tableQuery.page = 1;
-      this.getTable();
+      if (this.tableQuery.communityId) {
+        this.getTable();
+      } else {
+        this.$message.error("必须选择小区");
+      }
     },
     //删除行
     delRow(scope) {
@@ -182,7 +171,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          deleteBuilding(scope.row.buildingId)
+          deletePay(scope.row)
             .then(() => {
               this.$message({
                 type: "success",

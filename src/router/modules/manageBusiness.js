@@ -15,8 +15,8 @@ export default {
         {
           path: "/manageBusiness/estate",
           name: "estate",
-          meta: { name: "物产详情" },
-          component: () => import("@/views/manageBusiness/building/index.vue")
+          meta: { name: "物产信息" },
+          component: () => import("@/views/manageBusiness/estate/index.vue")
         }
       ]
     },

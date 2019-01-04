@@ -18,11 +18,15 @@
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="楼号" prop="buildingName">
-            <el-input v-model="postData.buildingName"></el-input>
+          <el-form-item label="支出类型" prop="payTypeId">
+            <paytype-select v-model="postData.payTypeId"></paytype-select>
           </el-form-item>
         </el-col>
-
+        <el-col :span="12">
+          <el-form-item label="支出用途" prop="payName">
+            <el-input v-model="postData.payName"></el-input>
+          </el-form-item>
+        </el-col>
         <el-col>
           <el-form-item>
             <el-button type="primary" native-type="submit" :loading="loading">提交</el-button>
@@ -35,20 +39,23 @@
 </template>
 
 <script>
-import { addBuilding } from "@/api/manage.js";
+import { addPay } from "@/api/financial.js";
 import communitySelect from "@/components/select/community-select.vue";
+import paytypeSelect from "@/components/select/paytype-select.vue";
 export default {
-  components: { communitySelect },
+  components: { communitySelect, paytypeSelect },
   data() {
     return {
       loading: false,
       postData: {
-        buildingName: "",
-        communityId: ""
+        payName: "",
+        communityId: null,
+        payTypeId: null
       },
       rules: {
-        buildingName: [this.$rules.required, this.$rules.length({ min: 6 })],
-        
+        payName: [this.$rules.required],
+        communityId: [this.$rules.required],
+        payTypeId: [this.$rules.required]
       }
     };
   },
@@ -58,7 +65,7 @@ export default {
         if (valid) {
           this.loading = true;
 
-          addBuilding(this.postData)
+          addPay(this.postData)
             .then(res => {
               this.$utils.callResponse(this, res);
             })

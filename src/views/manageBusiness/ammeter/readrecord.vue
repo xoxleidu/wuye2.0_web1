@@ -144,13 +144,13 @@ export default {
     //编辑
     openEdit(scope) {
       this.addKey++;
-      this.editId = scope.row.buildingId;
+      this.editId = scope.row.ammeterRecordId;
       this.editDialog = true;
     },
     //修改密码
     openRepassword(scope) {
       this.addKey++;
-      this.editId = scope.row.buildingId;
+      this.editId = scope.row.ammeterRecordId;
       this.repasswordDialog = true;
     },
     // 查询信息
@@ -186,7 +186,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          deleteAmmeterRecord(scope.row.buildingId)
+          deleteAmmeterRecord(scope.row.ammeterRecordId)
             .then(() => {
               this.$message({
                 type: "success",

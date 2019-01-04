@@ -12,17 +12,10 @@
     >
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="所属小区" prop="communityId">
-            <community-select class="base-select" v-model="postData.communityId"></community-select>
+          <el-form-item label="支出类型" prop="payTypeName">
+            <el-input v-model="postData.payTypeName"></el-input>
           </el-form-item>
         </el-col>
-
-        <el-col :span="12">
-          <el-form-item label="楼号" prop="buildingName">
-            <el-input v-model="postData.buildingName"></el-input>
-          </el-form-item>
-        </el-col>
-
         <el-col>
           <el-form-item>
             <el-button type="primary" native-type="submit" :loading="loading">提交</el-button>
@@ -35,20 +28,16 @@
 </template>
 
 <script>
-import { addBuilding } from "@/api/manage.js";
-import communitySelect from "@/components/select/community-select.vue";
+import { addPayType } from "@/api/manage.js";
 export default {
-  components: { communitySelect },
   data() {
     return {
       loading: false,
       postData: {
-        buildingName: "",
-        communityId: ""
+        payTypeName: ""
       },
       rules: {
-        buildingName: [this.$rules.required, this.$rules.length({ min: 6 })],
-        
+        payTypeName: [this.$rules.required]
       }
     };
   },
@@ -58,7 +47,7 @@ export default {
         if (valid) {
           this.loading = true;
 
-          addBuilding(this.postData)
+          addPayType(this.postData)
             .then(res => {
               this.$utils.callResponse(this, res);
             })

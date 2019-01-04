@@ -11,15 +11,20 @@
       @submit.native.prevent="handleSubmit"
     >
       <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="所属小区" prop="communityId">
-            <community-select class="base-select" v-model="postData.communityId"></community-select>
+        <el-col :span="24">
+          <el-form-item label="日期" prop="yearMonth">
+            <onedate-select class="base-select" v-model="postData.yearMonth"></onedate-select>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="楼号" prop="buildingName">
-            <el-input v-model="postData.buildingName"></el-input>
+          <el-form-item label="起始表底" prop="minNumber">
+            <el-input v-model="postData.minNumber"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="结束表底" prop="maxNumber">
+            <el-input v-model="postData.maxNumber"></el-input>
           </el-form-item>
         </el-col>
 
@@ -35,10 +40,10 @@
 </template>
 
 <script>
-import { updateBuilding, getBuilding } from "@/api/manage.js";
-import communitySelect from "@/components/select/community-select.vue";
+import { updateAmmeterRecord, getBuilding } from "@/api/manage.js";
+import onedateSelect from "@/components/select/onedate-select.vue";
 export default {
-  components: { communitySelect },
+  components: { onedateSelect },
   data() {
     return {
       loading: false,
@@ -67,7 +72,7 @@ export default {
         if (valid) {
           this.loading = true;
           console.log(this.postData);
-          updateBuilding(this.postData)
+          updateAmmeterRecord(this.postData)
             .then(res => {
               this.$utils.callResponse(this, res);
             })

@@ -8,11 +8,6 @@ export const getEstateType = query => {
 
 /**
  * 办公室接口
- * addOffice
- * deleteOffice
- * updateOffice
- * getOfficeTree
- * getOffice
  */
 export const addOffice = query => {
   query = JSON.parse(JSON.stringify(query));
@@ -50,12 +45,6 @@ export const getOfficeTree = () => {
 
 /**
  * 小区接口
- * addCommunity
- * deleteCommunity
- * deleteManyCommunity
- * updateCommunity
- * getCommunityTree
- * getCommunity
  */
 export const addCommunity = query => {
   query = JSON.parse(JSON.stringify(query));
@@ -107,11 +96,6 @@ export const getCommunityAutocharging = () => {
 
 /**
  *楼号接口
- addBuilding 
- deleteBuilding 
- deleteManyBuilding 
- updateBuilding 
- getBuilding
  */
 
 export const addBuilding = query => {
@@ -144,7 +128,6 @@ export const getBuilding = buildingId => {
 
 /**
  * 物产
- * @param {} query 
  */
 
 export const getEstateList = query => {
@@ -153,11 +136,6 @@ export const getEstateList = query => {
 
 /**
  *电表接口
- addBuilding 
- deleteBuilding 
- deleteManyBuilding 
- updateBuilding 
- getBuilding
  */
 
 
@@ -176,7 +154,6 @@ export const deleteAmmeter = query => {
 };
 
 export const updateAmmeter = query => {
-  console.log(query)
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/ammeter/update", query);
 };
@@ -202,11 +179,6 @@ export const activationAmmeter = query => {
 
 /**
  *抄表记录接口
- addBuilding 
- deleteBuilding 
- deleteManyBuilding 
- updateBuilding 
- getBuilding
  */
 
 
@@ -233,7 +205,51 @@ export const getAmmeterRecordList = query => {
   return ajax.get("/ammeterrecord/getList", { params: query });
 };
 
+export const getAmmeterRecord = query => {
+  return ajax.get("/ammeterrecord/getById?ammeterRecordId=" + query);
+}
+
 export const updateAmmeterRecordMaxNumber = query => {
+  query = {
+    ammeterRecordId: query.ammeterRecordId,
+    maxNumber: query.maxNumber
+  };
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/ammeterrecord/updateMaxNumber", query);
 };
+
+/**
+ *支出类型接口
+ */
+
+
+export const addPayType = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/paytype/add", query);
+};
+
+export const deletePayType = query => {
+  query = {
+    payTypeId: query.payTypeId
+  };
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/paytype/delete", query);
+};
+
+export const updatePayType = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/paytype/update", query);
+};
+
+export const getPayTypeList = query => {
+  return ajax.get("/paytype/getList", { params: query });
+};
+
+export const getPayType = query => {
+  return ajax.get("/paytype/getById", { params: query });
+};
+
+export const getPayTypeAll = () => {
+  return ajax.get("/paytype/getAll");
+};
+
