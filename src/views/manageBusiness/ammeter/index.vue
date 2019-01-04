@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { getAmmeterList, activationAmmeter } from "@/api/estate.js";
+import { getAmmeterList, activationAmmeter } from "@/api/manage.js";
 import communitySelect from "@/components/select/community-select.vue";
 import dictSelect from "@/components/select/dict-select.vue";
 export default {

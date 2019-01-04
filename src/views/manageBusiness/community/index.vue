@@ -183,7 +183,7 @@ import {
   addOffice,
   updateOffice,
   deleteOffice
-} from "@/api/estate.js";
+} from "@/api/manage.js";
 import add from "./add.vue";
 import edit from "./edit.vue";
 export default {

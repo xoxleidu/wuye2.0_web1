@@ -12,7 +12,7 @@
     >
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="所属小区" prop="communityId">
+          <el-form-item label="日期" prop="communityId">
             <community-select class="base-select" v-model="postData.communityId"></community-select>
           </el-form-item>
         </el-col>
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { updateBuilding, getBuilding } from "@/api/estate.js";
+import { addBuilding } from "@/api/manage.js";
 import communitySelect from "@/components/select/community-select.vue";
 export default {
   components: { communitySelect },
@@ -43,31 +43,22 @@ export default {
     return {
       loading: false,
       postData: {
-        buildingId: "",
         buildingName: "",
         communityId: ""
       },
       rules: {
-        buildingName: [this.$rules.required, this.$rules.length({ min: 6 })]
+        buildingName: [this.$rules.required, this.$rules.length({ min: 6 })],
+        
       }
     };
-  },
-  props: ["id"],
-  created() {
-    this.postData.buildingId = this.$props.id;
-    getBuilding(this.$props.id).then(res => {
-      if (res.data.code == 0) {
-        Object.assign(this.postData, res.data.data);
-      }
-    });
   },
   methods: {
     handleSubmit() {
       this.$refs["postForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          console.log(this.postData);
-          updateBuilding(this.postData)
+
+          addBuilding(this.postData)
             .then(res => {
               this.$utils.callResponse(this, res);
             })

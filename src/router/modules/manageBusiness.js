@@ -33,6 +33,12 @@ export default {
           component: () => import("@/views/manageBusiness/ammeter/readrecord.vue")
         }
       ]
+    },
+    {
+      path: "/manageBusiness/paytype",
+      name: "paytype",
+      meta: { name: "支出类型" },
+      component: () => import("@/views/manageBusiness/paytype/index.vue")
     }
   ]
 };

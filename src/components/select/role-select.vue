@@ -9,7 +9,7 @@
 
 
 <script>
-import { getRoleAll } from "@/api/estate";
+import { getRoleAll } from "@/api/manage.js";
 export default {
   name: "role-Select",
   props: ["value"],
@@ -31,7 +31,7 @@ export default {
 
   created() {
     //初始话下拉框的值
-    
+
     //this.selected = this.value;
     //this.options = {};
     //后台获取

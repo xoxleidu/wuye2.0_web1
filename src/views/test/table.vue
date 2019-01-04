@@ -119,7 +119,7 @@ import {
   updateCommunity,
   deleteCommunity,
   deleteManyCommunity
-} from "@/api/estate";
+} from "@/api/manage.js";
 export default {
   created() {
     this.getTable();

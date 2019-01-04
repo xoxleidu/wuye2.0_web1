@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { addBuilding } from "@/api/estate.js";
+import { addBuilding } from "@/api/manage.js";
 import communitySelect from "@/components/select/community-select.vue";
 export default {
   components: { communitySelect },

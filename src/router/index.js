@@ -8,6 +8,7 @@ import store from "@/store";
 import setting from "./modules/setting";
 import manageBusiness from "./modules/manageBusiness";
 import queryInfo from "./modules/queryInfo";
+import financialBusiness from "./modules/financialBusiness";
 Vue.use(Router);
 import "nprogress/nprogress.css";
 
@@ -43,8 +44,9 @@ var routes = [
     component: () => import("@/views/login.vue")
   },
   queryInfo,
-  setting,
+  financialBusiness,
   manageBusiness,
+  setting,
   {
     path: "/test",
     component: main,

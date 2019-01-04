@@ -189,7 +189,7 @@ CREATE TABLE `fee_item`  (
 DROP TABLE IF EXISTS `fee_rule`;
 CREATE TABLE `fee_rule`  (
   `fee_rule_id` int(11) NOT NULL,
-  `community_id` smallint(6) NOT NULL COMMENT '小区ID',
+  `communityId` smallint(6) NOT NULL COMMENT '小区ID',
   `fee_item_id` char(3) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '收费项ID',
   `fee_rule_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '收费规则名称',
   `price` decimal(10, 3) NOT NULL COMMENT '价格',
@@ -227,13 +227,30 @@ CREATE TABLE `fee_rule_update`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '收费规则替换记录' ROW_FORMAT = Compact;
 
+CREATE TABLE `pay` (
+  `payId` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `payName` varchar(50) DEFAULT NULL COMMENT '支出名称',
+  `payTypeId` int(11) unsigned NOT NULL COMMENT '支出类型ID',
+  `communityId` int(11) unsigned DEFAULT NULL COMMENT '小区ID',
+  `userId` int(11) unsigned DEFAULT NULL COMMENT '用户ID',
+  `money` decimal(7,1) NOT NULL COMMENT '总费用',
+  `payment` tinyint(4) DEFAULT NULL COMMENT '支出方式(1现金 2电子支付)',
+  `payTime` int(11) unsigned NOT NULL COMMENT '支出时间',
+  `voucherNum` int(11) unsigned DEFAULT NULL COMMENT '收据单号',
+  `state` int(11) unsigned DEFAULT NULL COMMENT '状态：1正常，2作废',
+  `note` varchar(50) DEFAULT NULL COMMENT '备注',
+  `createTime` datetime DEFAULT NULL,
+  `operator` int(11) DEFAULT NULL COMMENT '操作人员ID',
+  `hl` int(11) NOT NULL,
+  PRIMARY KEY (`pay_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='支出记录\r\n';
 -- ----------------------------
 -- Table structure for line_loss
 -- ----------------------------
 DROP TABLE IF EXISTS `line_loss`;
 CREATE TABLE `line_loss`  (
   `line_loss_id` smallint(6) NOT NULL,
-  `community_id` smallint(6) NOT NULL,
+  `communityId` smallint(6) NOT NULL,
   `line_loss_name` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `formula` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '公式：实耗度*1.5',
   `enable` tinyint(4) NOT NULL COMMENT '1启用  2禁用',

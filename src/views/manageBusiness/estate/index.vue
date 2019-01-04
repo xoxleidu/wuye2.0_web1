@@ -103,7 +103,7 @@
 <script>
 import communitySelect from "@/components/select/community-select.vue";
 import dictSelect from "@/components/select/dict-select.vue";
-import { getEstateList } from "@/api/estate.js";
+import { getEstateList } from "@/api/manage.js";
 export default {
   components: { communitySelect, dictSelect },
   created() {

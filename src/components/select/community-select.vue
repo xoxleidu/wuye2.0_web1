@@ -1,18 +1,18 @@
 <template>
-<div>
+  <div>
     <el-select class="base-select" v-model="selected" placeholder="请选择小区-可搜索" filterable>
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
   </div>
   <!-- <div class="block">
     <el-cascader class="base-select" v-model="selected" placeholder="请选择小区-可搜索" :options="options" filterable></el-cascader>
-  </div> -->
+  </div>-->
 </template>
 
 
 
 <script>
-import { getCommunityAll } from "@/api/estate";
+import { getCommunityAll } from "@/api/manage.js";
 export default {
   name: "community-Select",
   props: ["value"],

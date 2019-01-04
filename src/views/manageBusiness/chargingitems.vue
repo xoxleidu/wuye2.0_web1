@@ -118,7 +118,7 @@ import {
   addCommunity,
   updateCommunity,
   deleteCommunity
-} from "@/api/estate";
+} from "@/api/manage.js";
 export default {
   created() {
     this.getTable();

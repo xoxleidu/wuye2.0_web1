@@ -41,7 +41,7 @@
       class="admin-table-list"
     >
       <el-table-column prop="buildingName" label="地址"></el-table-column>
-      
+
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="openEdit(scope)" icon="el-icon-edit" type="success">编辑</el-button>
@@ -82,7 +82,6 @@
         @end="()=>{this.editDialog=false;this.editId='';}"
       ></edit>
     </el-dialog>
-    
   </div>
 </template>
 
@@ -94,7 +93,7 @@ export default {
   components: { add, edit },
   created() {
     //this.tableQuery.communityId = this.$route.query.communityId
-    this.tableQuery.communityId = Number(this.$route.query.communityId)
+    this.tableQuery.communityId = Number(this.$route.query.communityId);
     this.getTable();
   },
   data() {
@@ -109,7 +108,7 @@ export default {
         page: 1,
         size: 10,
         buildingName: "",
-        communityId:null
+        communityId: null
       },
       tableData: {
         data: [],
@@ -130,7 +129,7 @@ export default {
         param: { vehicleId: scope.row.scopeId }
       });
     },
-    
+
     //添加
     openAdd() {
       this.addKey++;

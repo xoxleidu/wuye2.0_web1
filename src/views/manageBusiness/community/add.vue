@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { addCommunity } from "@/api/estate.js";
+import { addCommunity } from "@/api/manage.js";
 import officeSelect from "@/components/select/office-select.vue";
 export default {
   components: { officeSelect },

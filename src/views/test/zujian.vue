@@ -1,7 +1,8 @@
 <template>
   <div>
     <user-select v-on:userSelect="user($event)"></user-select>
-    <date-select v-on:dateSelect="date($event)"></date-select>
+    <datetodate-select v-on:dateSelect="date($event)"></datetodate-select>
+    <onedate-select v-on:dateSelect="date($event)"></onedate-select>
     <community-select v-on:communitySelect="community($event)"></community-select>
     <office-select v-on:officeSelect="office($event)"></office-select>
     <dict-select class="base-select" v-model="testData" :dict="$dict.ROLE_MODE"></dict-select>
@@ -11,7 +12,8 @@
 </template>
 <script>
 import userSelect from "@/components/select/user-select.vue";
-import dateSelect from "@/components/select/date-select.vue";
+import datetodateSelect from "@/components/select/datetodate-select.vue";
+import onedateSelect from "@/components/select/onedate-select.vue";
 import communitySelect from "@/components/select/community-select.vue";
 import dictSelect from "@/components/select/dict-select.vue";
 import officeSelect from "@/components/select/office-select.vue";
@@ -21,12 +23,13 @@ export default {
   name: "group",
   components: {
     userSelect,
-    dateSelect,
+    datetodateSelect,
     communitySelect,
     officeSelect,
     dictSelect,
     roleSelect,
-    imgUpload
+    imgUpload,
+    onedateSelect
   },
   data(){
     return {

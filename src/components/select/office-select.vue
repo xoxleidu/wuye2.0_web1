@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { getOfficeAll } from "@/api/estate";
+import { getOfficeAll } from "@/api/manage.js";
 export default {
   name: "office-select",
   props: ["value"],

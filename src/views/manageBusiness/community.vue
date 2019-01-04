@@ -76,7 +76,7 @@
   </div>
 </template>
 <script>
-import { getOfficeTree } from "@/api/estate";
+import { getOfficeTree } from "@/api/manage.js";
 import communitySelect from "@/components/select/community-select.vue";
 import officeSelect from "@/components/select/office-select.vue";
 export default {

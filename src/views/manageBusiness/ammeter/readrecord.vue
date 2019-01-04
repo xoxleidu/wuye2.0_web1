@@ -90,10 +90,10 @@
 </template>
 
 <script>
-import { getAmmeterRecordList, deleteAmmeterRecord } from "@/api/estate.js";
-import add from "./add.vue";
-import edit from "./edit.vue";
-import repassword from "./repassword.vue";
+import { getAmmeterRecordList, deleteAmmeterRecord } from "@/api/manage.js";
+import add from "./readrecordadd.vue";
+import edit from "./readrecordedit.vue";
+import repassword from "./readrecordmaxnumber.vue";
 export default {
   components: { add, edit, repassword },
   created() {
