@@ -4,8 +4,6 @@
     <el-menu
       :default-active="$route.path"
       router
-      background-color="#20222a"
-      text-color="rgba(255,255,255,.8)"
     >
       <div v-for="route in routes" :key="route.path">
         <slide-item :route="route"></slide-item>
@@ -45,7 +43,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main-slide {
-  background: #20222a;
+  background: #FFF;
   .el-menu {
     border-right: 0;
     .is-active {

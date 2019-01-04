@@ -4,7 +4,7 @@
     <el-container>
       <el-header style="text-align: right; font-size: 12px">
         <el-dropdown>
-          <i class="el-icon-setting" style="margin-right: 15px"></i>
+          <i class="el-icon-setting" style="margin-right: 15px;color:#fff;"></i>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>查看</el-dropdown-item>
           </el-dropdown-menu>
@@ -37,8 +37,8 @@ body,
   height: 100%;
 }
 .el-header {
-  background-color: #20222a;
-  color: #fff;
+  background-color: #1368bf;
+  color: #FFF;
   line-height: 60px;
 }
 .main-slide {

@@ -65,9 +65,9 @@ CREATE TABLE `ammeter_ladder`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `ammeter_record`;
 CREATE TABLE `ammeter_record`  (
-  `ammeter_record_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL COMMENT '操作人ID',
-  `ammeter_id` int(11) NOT NULL COMMENT '电表ID',
+  `ammeterRecordId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL COMMENT '操作人ID',
+  `ammeterId` int(11) NOT NULL COMMENT '电表ID',
   `yearMonth` int(11) NOT NULL COMMENT '日期(年/月)',
   `minNumber` int(11) NOT NULL COMMENT '起始表底',
   `maxNumber` int(11) NOT NULL COMMENT '结束表底',

@@ -56,7 +56,7 @@ var routes = [
     children: [
       {
         path: "",
-        component: () => import("@/views/test.vue")
+        component: () => import("@/views/test/test.vue")
       }
     ]
   },
@@ -71,7 +71,7 @@ var routes = [
     children: [
       {
         path: "",
-        component: () => import("@/views/zujian.vue")
+        component: () => import("@/views/test/zujian.vue")
       }
     ]
   },

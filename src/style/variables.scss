@@ -3,4 +3,4 @@
     根目录下  vue.config.js中 会调用此文件，并通过webpack注入到所有.vue组件中，
     所以 所有.vue文件中声明了 lang=scss的sytle区块内，均可以调用该文件的变量
 */
-$baseColor: red;
+$baseColor: #409eff;

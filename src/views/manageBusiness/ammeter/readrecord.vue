@@ -24,7 +24,7 @@
     </el-card>
     <div class="admin-methdos-btns">
       <el-button @click="openAdd()" size="medium" type="primary" icon="el-icon-plus">添加记录</el-button>
-      <el-button @click="openEdit()" size="medium" type="primary" icon="el-icon-plus">换表</el-button>
+      <el-button @click="openEdit()" size="medium" type="primary" icon="el-icon-refresh">换表</el-button>
     </div>
     <el-table
       border
@@ -35,11 +35,19 @@
       style="width: 100%;"
       class="admin-table-list"
     >
-      <el-table-column prop="buildingName" label="地址"></el-table-column>
+      <el-table-column prop="yearMonth" label="日期"></el-table-column>
+      <el-table-column prop="minNumber" label="起始表底"></el-table-column>
+      <el-table-column prop="maxNumber" label="结束表底"></el-table-column>
+      <el-table-column label="标注">
+        <template slot-scope="scope">
+          {{scope.row.state==1? "未收费" : scope.row.state==2? "未产生费用" : scope.row.state==3? "已收费" : scope.row.state==4? "自动缴费" : ""}}
+        </template>
+      </el-table-column>
 
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="delRow(scope)" icon="el-icon-edit" type="danger">取消缴费</el-button>
+          <el-button size="mini" @click="openRepassword(scope)" icon="el-icon-edit" type="warning">修改表底</el-button>
+          <el-button size="mini" @click="delRow(scope)" icon="el-icon-edit-outline" type="danger">取消缴费</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -70,15 +78,24 @@
         @end="()=>{this.editDialog=false;this.editId='';}"
       ></edit>
     </el-dialog>
+    <el-dialog title="修改表底" :visible.sync="repasswordDialog" width="40%" center>
+      <repassword
+        :key="addKey"
+        :id="editId"
+        @success="()=>{this.getTable();this.editDialog=false;this.editId='';}"
+        @end="()=>{this.repasswordDialog=false;this.editId='';}"
+      ></repassword>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getBuildingList, deleteBuilding } from "@/api/estate.js";
+import { getAmmeterRecordList, deleteAmmeterRecord } from "@/api/estate.js";
 import add from "./add.vue";
 import edit from "./edit.vue";
+import repassword from "./repassword.vue";
 export default {
-  components: { add, edit },
+  components: { add, edit, repassword },
   created() {
     this.tableQuery.ammeterId = Number(this.$route.query.ammeterId);
     this.tableQuery.ammeterName = this.$route.query.ammeterName;
@@ -139,7 +156,7 @@ export default {
     // 查询信息
     getTable() {
       this.tableLoading = true;
-      getBuildingList(this.tableQuery)
+      getAmmeterRecordList(this.tableQuery)
         .then(res => {
           this.tableLoading = false;
           var result = [];
@@ -169,7 +186,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          deleteBuilding(scope.row.buildingId)
+          deleteAmmeterRecord(scope.row.buildingId)
             .then(() => {
               this.$message({
                 type: "success",

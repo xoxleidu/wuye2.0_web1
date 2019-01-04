@@ -199,3 +199,41 @@ export const activationAmmeter = query => {
   query = JSON.parse(JSON.stringify(query));
   return ajax.post("/ammeter/enable", query);
 };
+
+/**
+ *抄表记录接口
+ addBuilding 
+ deleteBuilding 
+ deleteManyBuilding 
+ updateBuilding 
+ getBuilding
+ */
+
+
+export const addAmmeterRecord = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/ammeterrecord/add", query);
+};
+
+export const deleteAmmeterRecord = query => {
+  query = {
+    ammeterRecordId: query.ammeterRecordId,
+    state: query.state
+  };
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/ammeterrecord/delete", query);
+};
+
+export const updateAmmeterRecord = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/ammeterrecord/update", query);
+};
+
+export const getAmmeterRecordList = query => {
+  return ajax.get("/ammeterrecord/getList", { params: query });
+};
+
+export const updateAmmeterRecordMaxNumber = query => {
+  query = JSON.parse(JSON.stringify(query));
+  return ajax.post("/ammeterrecord/updateMaxNumber", query);
+};
